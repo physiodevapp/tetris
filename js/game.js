@@ -9,6 +9,8 @@ class Game {
 
     this.action = ''
     this.dropVel = 2
+
+    this.newFigures = []
   }
 
   load() {
@@ -57,7 +59,6 @@ class Game {
   }
 
   initData() {
-    // this.storeSquares = []
     this.matrix = new Matrix(this.colDim, this.rowDim)
     this.addNewFigure()
   }
@@ -108,20 +109,50 @@ class Game {
       this.addNewFigure()
     }
   }
-  
+
   addNewFigure() {
-    this.figure = new BigSquare(this.ctx, this.colDim, this.rowDim)
+    // this.figure = new O_Figure(this.ctx, this.colDim, this.rowDim)
+    let newFigure
+    while (this.newFigures.length < 2) {
+      this.newFigures.push(this.chooseNewFigure())
+    }
+    switch (this.newFigures[0]) {
+      case 73:
+        newFigure = new I_Figure(this.ctx, this.colDim, this.rowDim)
+        break;
+      case 74:
+        newFigure = new J_Figure(this.ctx, this.colDim, this.rowDim)
+        break;
+      case 76:
+        newFigure = new L_Figure(this.ctx, this.colDim, this.rowDim)
+        break;
+      case 79:
+        newFigure = new O_Figure(this.ctx, this.colDim, this.rowDim)
+        break;
+      case 83:
+        newFigure = new S_Figure(this.ctx, this.colDim, this.rowDim)
+        break;
+      case 84:
+        newFigure = new T_Figure(this.ctx, this.colDim, this.rowDim)
+        break;
+      case 90:
+        newFigure = new Z_Figure(this.ctx, this.colDim, this.rowDim)
+        break;
+    }
+    this.newFigures.shift()
+
+    this.figure = newFigure
     console.log(this.figure)
+    console.log('next figure is: ', this.newFigures[0])
   }
 
-  addNewSquare() {
-    // this.square = new Square(this.ctx, 6, -1, this.ctx.canvas.clientWidth / this.colDim, this.ctx.canvas.clientHeight / this.rowDim)
-    // console.log(this.square)
+
+
+  chooseNewFigure() {
+    const letters = [73, 74, 76, 79, 83, 84, 90]
+    const indexLetter = Math.floor(Math.random() * 7)
+    return letters[indexLetter]
   }
 
-  storeSquare() {
-    // this.matrix.freeze(this.square)
-    // this.storeSquares.push(this.square)
-  }
 
 }

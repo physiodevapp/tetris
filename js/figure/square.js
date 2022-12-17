@@ -9,14 +9,6 @@ class Square {
     this.h = h
 
     this.ay = 0
-
-    // this.vy = this.h
-
-    // this.col = col
-    // this.row = row
-
-    // this.x = this.colToX()
-    // this.y = this.rowToY()
   }
 
   draw() {
@@ -50,21 +42,6 @@ class Square {
 
   rowToY() {
     return this.y * this.h
-  }
-
-  setDown() {
-    // this.y += 1
-  }
-
-  setLeftRight(leftRight) {
-    // switch (leftRight) {
-    //   case 'right':
-    //     this.x += 1
-    //     break;
-    //   case 'left':
-    //     this.x -= 1
-    //     break;
-    // }
   }
 
 }

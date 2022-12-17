@@ -87,7 +87,6 @@ class Matrix {
         }
       })
     })
-    // como filtro una matriz para quedarme solo con los que no son null??
   }
 
 
