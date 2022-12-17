@@ -2,56 +2,67 @@ class Square {
   constructor(ctx, col, row, w, h) {
     this.ctx = ctx
 
-    this.col = col
-    this.row = row
+    // this.col = col
+    // this.row = row
 
     this.w = w
     this.h = h
 
-    this.x = this.colToX()
-    this.y = this.rowToY()
+    // this.x = this.colToX()
+    // this.y = this.rowToY()
+    this.x = col
+    this.y = row
 
     this.ay = 0
     this.vy = this.h
   }
 
   draw() {
+    // console.log('draw')
     this.ctx.save()
     this.ctx.fillStyle = 'red'
-    this.ctx.fillRect(this.x, this.y, this.w, this.h)
+    this.ctx.fillRect(this.colToX(), this.rowToY(), this.w, this.h)
     this.ctx.restore()
   }
 
+  set(action) {
+    switch (action) {
+      case 'rotate':
+        break;
+      case 'left':
+        this.x -= 1
+        break;
+      case 'right':
+        this.x += 1
+        break;
+      case 'down':
+      default:
+        this.y += 1
+        break;
+    }
+  }
+
   setDown() {
-    // this.vy += this.ay Como implementar esta funcionalidad
-    this.y += this.vy 
+    this.y += 1
   }
 
   setLeftRight(leftRight) {
     switch (leftRight) {
       case 'right':
-        this.x += this.w
+        this.x += 1
         break;
       case 'left':
-        this.x -= this.w
+        this.x -= 1
         break;
     }
   }
 
   colToX() {
-    return this.col * this.w
+    return this.x * this.w
   }
 
   rowToY() {
-    return this.row * this.h
-  }
-
-  xToCol() {
-    return Math.floor(this.x / this.w)
-  }
-
-  yToRow() {
-    return Math.floor(this.y / this.h)
+    return this.y * this.h
   }
 
 }

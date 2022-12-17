@@ -7,8 +7,8 @@ class Game {
 
     this.intervalId = null
 
-    this.leftRight = ''
-    this.dropVel = 10
+    this.action = ''
+    this.dropVel = 35
   }
 
   load() {
@@ -39,23 +39,21 @@ class Game {
       // console.log(ev)
       switch (ev.keyCode) {
         case 39:
-          this.leftRight = 'right'
+          this.action = 'right'
           break;
         case 37:
-          this.leftRight = 'left'
+          this.action = 'left'
           break;
         default:
-          this.leftRight = ''
+          this.action = ''
       }
-      
-      if (this.leftRight && this.matrix.canSetLeftRight(this.square, this.leftRight)) {
+
+      if (this.action && this.matrix.canSetLeftRight(this.square, this.action)) {
         this.move()
       }
-      
-      this.leftRight = ''
+
+      this.action = ''
     }
-
-
   }
 
   initData() {
@@ -66,8 +64,8 @@ class Game {
 
   start() {
     this.intervalId = setInterval(() => {
-      this.move()
       this.check()
+      this.move()
     }, 1000 / this.dropVel)
   }
 
@@ -94,6 +92,14 @@ class Game {
     this.storeSquares.forEach((square) => square.draw())
   }
 
+  move() { // Pongo set en vez de move porque realmente visualmente se ve cuando se draw
+    if (this.matrix.canSet(this.square, this.action)) {
+      this.square.set(this.action)
+    }
+    this.clear()
+    this.draw()
+  }
+
   check() {
     if (this.matrix.isOverflow()) {
       this.end()
@@ -103,19 +109,9 @@ class Game {
     }
   }
 
-  move() { // Pongo set en vez de move porque realmente visualmente se ve cuando se draw
-    if (this.leftRight && this.matrix.canSetLeftRight(this.square, this.leftRight)) {
-      this.square.setLeftRight(this.leftRight)
-    } else if (this.matrix.canSetDown(this.square)) {
-      this.square.setDown()
-    }
-    this.clear()
-    this.draw()
-  }
-
   addNewSquare() {
     this.square = new Square(this.ctx, 6, -1, this.ctx.canvas.clientWidth / this.colDim, this.ctx.canvas.clientHeight / this.rowDim)
-    // this.figure = new Figure(this.ctx, 'square')
+    // console.log(this.square)
   }
 
   storeSquare() {

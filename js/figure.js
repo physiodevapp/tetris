@@ -1,27 +1,39 @@
 class Figure {
-  constructor(ctx, pattern) {
+  constructor(pattern, ctx, rowDim, colDim) {
     this.pattern = pattern
-    this.construction = [ ]
+    this.ctx = ctx
+    this.rowDim = rowDim
+    this.colDim = colDim
+
+    this.squares = []
   }
 
-  draw() {
-    switch (pattern) {
+  create() {
+    switch (this.pattern) {
       case 'square':
-        
+        for(let index = 0; index < 1; index++) {
+          const square = new Square(this.ctx, 6, -1, this.ctx.canvas.clientWidth / this.colDim, this.ctx.canvas.clientHeight / this.rowDim)
+          this.squares.push(square)
+        }
         break;
       case 'row':
         for(let index = 0; index < 4; index++) {
-          this.construction.push(square)
+          const square = new Square(this.ctx, 6 + index, -1, this.ctx.canvas.clientWidth / this.colDim, this.ctx.canvas.clientHeight / this.rowDim)
+          this.squares.push(square)
         }
         break;
     }
   }
 
-  move() {
-    switch (pattern) {
-      case 'square':
+  setDown() {
+    this.squares.forEach((square) => square.setDown())
+  }
+  
+  setLeftRight(leftRight) {
+    this.squares.forEach((square) => square.setLeftRight(leftRight))
+  }
 
-        break;
-    }
+  draw() {
+    this.squares.forEach((square) => square.draw())
   }
 }
