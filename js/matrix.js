@@ -16,7 +16,11 @@ class Matrix {
     return !this.values[0].every((value) => value === null)
   }
 
-  canSet(square, action) {
+  canSet(figure, action) {
+    return figure.squares.every((square) => this.fit(square, action))
+  }
+  
+  fit(square, action) {
     let x = 0;
     let y = 0
     switch (action) {
@@ -36,10 +40,6 @@ class Matrix {
     return square.y + y < this.rowDim &&
       square.x + x < this.colDim &&
       this.values[square.y + y][square.x + x] === null
-  }
-
-  fit(square) {
-    // return square.x
   }
 
   canSetDown(square) {
@@ -74,11 +74,21 @@ class Matrix {
     // return true
   }
 
-  freeze(square) {
-    this.values[square.y][square.x] = square
+  freeze(figure) {
+    figure.squares.forEach((square) => this.values[square.y][square.x] = square)
     // console.log(this.values)
   }
 
+  draw() {
+    this.values.forEach((row) => {
+      row.forEach((square) => {
+        if (square) {
+          square.draw()
+        }
+      })
+    })
+    // como filtro una matriz para quedarme solo con los que no son null??
+  }
 
 
 }

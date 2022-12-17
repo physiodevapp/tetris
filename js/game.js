@@ -8,7 +8,7 @@ class Game {
     this.intervalId = null
 
     this.action = ''
-    this.dropVel = 35
+    this.dropVel = 2
   }
 
   load() {
@@ -48,7 +48,7 @@ class Game {
           this.action = ''
       }
 
-      if (this.action && this.matrix.canSetLeftRight(this.square, this.action)) {
+      if (this.action && this.matrix.canSet(this.figure, this.action)) {
         this.move()
       }
 
@@ -57,9 +57,9 @@ class Game {
   }
 
   initData() {
-    this.storeSquares = []
+    // this.storeSquares = []
     this.matrix = new Matrix(this.colDim, this.rowDim)
-    this.addNewSquare()
+    this.addNewFigure()
   }
 
   start() {
@@ -88,13 +88,13 @@ class Game {
   }
 
   draw() {
-    this.square.draw()
-    this.storeSquares.forEach((square) => square.draw())
+    this.figure.draw()
+    this.matrix.draw()
   }
 
   move() { // Pongo set en vez de move porque realmente visualmente se ve cuando se draw
-    if (this.matrix.canSet(this.square, this.action)) {
-      this.square.set(this.action)
+    if (this.matrix.canSet(this.figure, this.action)) {
+      this.figure.set(this.action)
     }
     this.clear()
     this.draw()
@@ -103,20 +103,25 @@ class Game {
   check() {
     if (this.matrix.isOverflow()) {
       this.end()
-    } else if (!this.matrix.canSetDown(this.square)) {
-      this.storeSquare()
-      this.addNewSquare()
+    } else if (!this.matrix.canSet(this.figure, this.action)) {
+      this.matrix.freeze(this.figure)
+      this.addNewFigure()
     }
+  }
+  
+  addNewFigure() {
+    this.figure = new BigSquare(this.ctx, this.colDim, this.rowDim)
+    console.log(this.figure)
   }
 
   addNewSquare() {
-    this.square = new Square(this.ctx, 6, -1, this.ctx.canvas.clientWidth / this.colDim, this.ctx.canvas.clientHeight / this.rowDim)
+    // this.square = new Square(this.ctx, 6, -1, this.ctx.canvas.clientWidth / this.colDim, this.ctx.canvas.clientHeight / this.rowDim)
     // console.log(this.square)
   }
 
   storeSquare() {
-    this.matrix.freeze(this.square)
-    this.storeSquares.push(this.square)
+    // this.matrix.freeze(this.square)
+    // this.storeSquares.push(this.square)
   }
 
 }
