@@ -1,23 +1,26 @@
-class Figure extends Square {
-  constructor(ctx, matrix, pattern) {
-    super(ctx, matrix)
+class Figure {
+  constructor(ctx, pattern) {
     this.pattern = pattern
+    this.construction = [ ]
   }
 
   draw() {
-    switch (this.pattern) {
+    switch (pattern) {
       case 'square':
-        super.draw()
+        
+        break;
+      case 'row':
+        for(let index = 0; index < 4; index++) {
+          this.construction.push(square)
+        }
         break;
     }
   }
 
   move() {
-    console.log(this)
-    switch (this.pattern) {
+    switch (pattern) {
       case 'square':
-        // console.log(super)
-        super.move()
+
         break;
     }
   }

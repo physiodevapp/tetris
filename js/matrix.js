@@ -1,69 +1,56 @@
 class Matrix {
-  constructor(ctx, xDim, yDim) {
-    this.ctx = ctx
+  constructor(colDim, rowDim) {
+    this.colDim = colDim
+    this.rowDim = rowDim
 
-    this.xDim = xDim
-    this.yDim = yDim
-
-    this.xPos = (this.xDim / 2)
-    this.yPos = 0
-
-    this.values = [];
-
-    this.create();
+    this.values = this.create()
   }
 
   create() {
-    const values = [];
-    for (let i = 0; i < this.xDim; i++) {
-      const col = [];
-      for (let j = 0; j < this.yDim; j++) {
-        col.push(0)
-      }
-      values.push(col)
-    }
-    this.values = values;
-  }
-
-  move() { //cuando completemos una fila
-    // this.xPos = this.xPos < this.xDim ? this.xPos + 0 : this.xDim;
-    // this.yPos = this.yPos < this.yDim ? this.yPos + 1 : this.yDim;
+    return new Array(this.rowDim)
+      .fill(0)
+      .map(() => new Array(this.colDim).fill(0))
   }
 
   isOverflow() {
-    // return this.values[this.xPos][0]
-    return this.values.filter((col) => col[0] === 1).length
+    return this.values[0].includes(1)
   }
 
-  isEmpty(x, y) { //this.isEmpty(square)
-    // console.log('x: ', x, 'y: ', y)
-    // console.log('xPos: ', this.xPos, 'yPos: ', this.yPos)
-    // if (this.yPos === this.yDim) {
-    //   return false
-    // }
-    return this.values[x][y] === 0 // necesario === 0 para evitar casos 'undefined'
-  }
-
-  freeze(x, y) {
-    if (!this.isOverflow() && !this.isEmpty(x, y + altoCuadrado)) {
-      this.values[x][y] = 1
+  canSetDown(square) {
+    if (square.yToRow() >= this.rowDim - 1) {
+      return false
     }
+    const canDown = !this.values[square.yToRow() + 1][square.xToCol()];
+    return canDown
   }
 
-  draw() {
-    this.values.forEach((row, xPos) => {
-      row.forEach((value, yPos) => {
-        if (value) { // value = 1 si posición ocupada y value = 0 si posición vacía
-          const square = new Square(
-            this.ctx,
-            xPos * (this.ctx.canvas.clientWidth / this.xDim),
-            yPos * (this.ctx.canvas.clientHeight / this.yDim),
-            this.xDim,
-            this.yDim
-          )
-          square.draw()
-        }
-      })
-    })
+  canSetLeftRight(square, leftRight) {
+    // a veces me devuelve error 'cannot read property of undefined' si desplazo horizontalmente sobre la última línea inferior libre antes de almacenar el square
+    // ...hacer un try catch??
+    let canLeftRight;
+    try {
+      switch (leftRight) {
+        case 'right':
+          canLeftRight = this.values[square.yToRow()][square.xToCol() + 1] === 0
+          break;
+        case 'left':
+          canLeftRight = this.values[square.yToRow()][square.xToCol() - 1] === 0
+          break;
+        default:
+          canLeftRight = false
+      }
+      return canLeftRight
+    } catch (error) {
+      // console.log(error)
+      return false
+    }
+
+    // return true
   }
+
+  freeze(square) {
+    this.values[square.yToRow()][square.xToCol()] = 1
+    // console.log(this.values)
+  }
+
 }

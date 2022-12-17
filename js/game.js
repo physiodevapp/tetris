@@ -1,114 +1,126 @@
 class Game {
-  constructor(ctx, xDim, yDim) {
+  constructor(ctx, colDim, rowDim) {
     this.ctx = ctx
-    this.w = this.ctx.canvas.clientWidth
-    this.h = this.ctx.canvas.clientHeight
 
-    this.matrix = new Matrix(this.ctx, xDim, yDim)
-    this.ghostSquare = new Square(this.ctx, 6, 0, xDim, yDim)
-    // this.figure = null
+    this.colDim = colDim
+    this.rowDim = rowDim
 
     this.intervalId = null
 
-    // this.dropVel = 10
-    // this.drop = 0
+    this.leftRight = ''
+    this.dropVel = 10
   }
 
   load() {
-    // this.matrix.create() // se repite dos veces en el código, puede abstraerse en una sola funcion?
-    this.interactions()
-
-    console.log(this.matrix)
+    this.initInteractions()
+    this.initData()
+    // console.log(this.matrix)
   }
 
-  interactions() {
+  initInteractions() {
     document.getElementById('start-stop').onclick = (ev) => {
       switch (ev.target.innerHTML) {
-        case 'START':
-          ev.target.innerHTML = 'STOP';
-          this.start()
+        case 'PLAY':
+          ev.target.innerHTML = 'STOP'
+          this.start();
           break;
         case 'STOP':
-          ev.target.innerHTML = 'START';
-          this.stop()
+          ev.target.innerHTML = 'PLAY'
+          this.stop();
           break;
         case 'RESTART':
-          this.new()
+          ev.target.innerHTML = 'STOP'
+          this.restart();
+          break;
       }
     }
+
+    document.body.onkeydown = (ev) => {
+      // console.log(ev)
+      switch (ev.keyCode) {
+        case 39:
+          this.leftRight = 'right'
+          break;
+        case 37:
+          this.leftRight = 'left'
+          break;
+        default:
+          this.leftRight = ''
+      }
+      
+      if (this.leftRight && this.matrix.canSetLeftRight(this.square, this.leftRight)) {
+        this.move()
+      }
+      
+      this.leftRight = ''
+    }
+
+
+  }
+
+  initData() {
+    this.storeSquares = []
+    this.matrix = new Matrix(this.colDim, this.rowDim)
+    this.addNewSquare()
   }
 
   start() {
     this.intervalId = setInterval(() => {
-      this.clear()
-      this.draw()
-      if (this.matrix.isEmpty(this.matrix.xPos, this.matrix.yPos + 1)) {
-        this.move()
-      } else {
-        this.matrix.update()
-        if (this.matrix.isOverflow()) {
-          this.end()
-        } else {
-          this.matrix.yPos = -1
-          this.move()
-        }
-      }
-    }, 1000);
+      this.move()
+      this.check()
+    }, 1000 / this.dropVel)
   }
 
-  draw() {
-    this.matrix.draw()
-
-    this.ghostSquare = new Square(
-      this.ctx,
-      this.matrix
-    )
-    this.ghostSquare.draw()
-
-    // this.figure = new Figure(
-    //   this.ctx,
-    //   this.matrix,
-    //   'square'
-    // )
-
-    // this.figure = new Figure('square')
-    // console.log(this.figure)
-
-  }
-
-  move() {
-    // this.matrix.move()
-
-    // comprobar si se puede mover en la matriz
-    // metodo can() en la matriz
-    this.ghostSquare.move()
-
-    // this.figure.move()
-  }
-
-
-  clear() {
-    this.ctx.clearRect(0, 0, this.w, this.h)
-  }
-
-  stop() { // tal y como está, puedo pasarle el argumento innerHTML y quitarme el end()...
+  stop() {
     clearInterval(this.intervalId)
-    document.getElementById('start-stop').innerHTML = 'START'
-
-    console.log(this.matrix)
   }
 
   end() {
-    clearInterval(this.intervalId)
+    this.stop()
     document.getElementById('start-stop').innerHTML = 'RESTART'
-
-    console.log(this.matrix)
   }
 
-  new() {
-    document.getElementById('start-stop').innerHTML = 'STOP'
-    this.matrix.create()
+  restart() {
+    this.initData()
     this.start()
+  }
+
+  clear() {
+    this.ctx.clearRect(0, 0, this.ctx.canvas.clientWidth, this.ctx.canvas.clientHeight);
+  }
+
+  draw() {
+    this.square.draw()
+    this.storeSquares.forEach((square) => square.draw())
+  }
+
+  check() {
+    if (this.matrix.isOverflow()) {
+      this.end()
+    } else if (!this.matrix.canSetDown(this.square)) {
+      this.storeSquare()
+      this.addNewSquare()
+    }
+  }
+
+  move() { // Pongo set en vez de move porque realmente visualmente se ve cuando se draw
+    if (this.leftRight && this.matrix.canSetLeftRight(this.square, this.leftRight)) {
+      this.square.setLeftRight(this.leftRight)
+    } else if (this.matrix.canSetDown(this.square)) {
+      this.square.setDown()
+    }
+    this.clear()
+    this.draw()
+  }
+
+  addNewSquare() {
+    this.square = new Square(this.ctx, 6, -1, this.ctx.canvas.clientWidth / this.colDim, this.ctx.canvas.clientHeight / this.rowDim)
+    // this.figure = new Figure(this.ctx, 'square')
+  }
+
+  storeSquare() {
+    this.matrix.freeze(this.square)
+    this.storeSquares.push(this.square)
   }
 
 }

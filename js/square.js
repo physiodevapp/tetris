@@ -1,23 +1,57 @@
 class Square {
-  constructor(ctx, x, y, xDim, yDim) {
+  constructor(ctx, col, row, w, h) {
     this.ctx = ctx
 
-    this.w = this.ctx.canvas.clientWidth / xDim
-    this.h = this.ctx.canvas.clientHeight / yDim
+    this.col = col
+    this.row = row
 
-    this.x = x
-    this.y = y
+    this.w = w
+    this.h = h
+
+    this.x = this.colToX()
+    this.y = this.rowToY()
+
+    this.ay = 0
+    this.vy = this.h
   }
 
   draw() {
     this.ctx.save()
-    this.ctx.fillStyle = 'red';
+    this.ctx.fillStyle = 'red'
     this.ctx.fillRect(this.x, this.y, this.w, this.h)
     this.ctx.restore()
   }
 
-  move() {
-    // this.x += 1 
-    this.y += 1 //convertir a coordenadas
+  setDown() {
+    // this.vy += this.ay Como implementar esta funcionalidad
+    this.y += this.vy 
   }
+
+  setLeftRight(leftRight) {
+    switch (leftRight) {
+      case 'right':
+        this.x += this.w
+        break;
+      case 'left':
+        this.x -= this.w
+        break;
+    }
+  }
+
+  colToX() {
+    return this.col * this.w
+  }
+
+  rowToY() {
+    return this.row * this.h
+  }
+
+  xToCol() {
+    return Math.floor(this.x / this.w)
+  }
+
+  yToRow() {
+    return Math.floor(this.y / this.h)
+  }
+
 }
