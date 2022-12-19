@@ -2,6 +2,9 @@ class S_Figure extends Figure {
   constructor(ctx, colDim, rowDim) {
     super(ctx, colDim, rowDim)
 
+    this.position = 0;
+    this.positions = [0, 1]
+
     this.create()
   }
 
@@ -13,6 +16,24 @@ class S_Figure extends Figure {
           this.squares.push(square)
         }
       }
+    }
+  }
+
+  setRotation() {
+    this.goNextPosition()
+    switch (this.position) {
+      case 0:
+        for (let i = 0; i < this.squares.length; i++) {
+          this.squares[i].x += i === 0 ? 1 : i === 1 ? 2 : i === 2 ? -1 : 0
+          this.squares[i].y += (i === 0 || i === 2) ? -1 : 0 
+        }
+        break;
+      case 1:
+        for (let i = 0; i < this.squares.length; i++) {
+          this.squares[i].x += i === 0 ? -1 : i === 1 ? -2 : i === 2 ? 1 : 0
+          this.squares[i].y += (i === 0 || i === 2) ? 1 : 0 
+        }
+        break;
     }
   }
 

@@ -11,11 +11,26 @@ class Figure {
     this.squares = []
   }
 
-  set(action) {
-    this.squares.forEach((square) => square.set(action))
+  setTranslation(action) {
+    this.squares.forEach((square) => square.setTranslation(action))
   }
 
   draw() {
     this.squares.forEach((square) => square.draw())
+  }
+
+  clone() {
+    const figure =  Object.assign(Object.create(Object.getPrototypeOf(this)), this);
+    figure.squares = figure.squares.map(square => Object.assign(Object.create(Object.getPrototypeOf(square)), square))
+    // console.log('clone ', figure)
+    return figure;
+  }
+
+  goNextPosition() {
+    if (this.positions.includes(this.position + 1)) {
+      this.position++
+    } else {
+      this.position = 0
+    }
   }
 }

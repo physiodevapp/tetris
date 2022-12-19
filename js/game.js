@@ -8,7 +8,7 @@ class Game {
     this.intervalId = null
 
     this.action = ''
-    this.dropVel = 2
+    this.dropVel = 1
 
     this.newFigures = []
   }
@@ -39,6 +39,9 @@ class Game {
 
     document.body.onkeydown = (ev) => {
       // console.log(ev)
+      if (!this.intervalId) {
+        return null
+      }
       switch (ev.keyCode) {
         case 39:
           this.action = 'right'
@@ -46,11 +49,14 @@ class Game {
         case 37:
           this.action = 'left'
           break;
+        case 38:
+          this.action = 'rotate'
+          break;
         default:
           this.action = ''
       }
 
-      if (this.action && this.matrix.canSet(this.figure, this.action)) {
+      if (this.action) {
         this.move()
       }
 
@@ -72,6 +78,7 @@ class Game {
 
   stop() {
     clearInterval(this.intervalId)
+    this.intervalId = null
   }
 
   end() {
@@ -95,7 +102,11 @@ class Game {
 
   move() { // Pongo set en vez de move porque realmente visualmente se ve cuando se draw
     if (this.matrix.canSet(this.figure, this.action)) {
-      this.figure.set(this.action)
+      if (this.action === 'rotate') {
+        this.figure.setRotation()
+      } else {
+        this.figure.setTranslation(this.action)
+      }
     }
     this.clear()
     this.draw()
@@ -111,7 +122,6 @@ class Game {
   }
 
   addNewFigure() {
-    // this.figure = new O_Figure(this.ctx, this.colDim, this.rowDim)
     let newFigure
     while (this.newFigures.length < 2) {
       this.newFigures.push(this.chooseNewFigure())
@@ -141,12 +151,13 @@ class Game {
     }
     this.newFigures.shift()
 
-    this.figure = newFigure
-    console.log(this.figure)
-    console.log('next figure is: ', this.newFigures[0])
+    // this.figure = newFigure
+    // console.log('next figure is: ', this.newFigures[0])
+    
+    this.figure = new I_Figure(this.ctx, this.colDim, this.rowDim)
+
+    // console.log(this.figure)
   }
-
-
 
   chooseNewFigure() {
     const letters = [73, 74, 76, 79, 83, 84, 90]

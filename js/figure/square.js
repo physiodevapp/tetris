@@ -12,14 +12,16 @@ class Square {
   }
 
   draw() {
-    // console.log('draw')
     this.ctx.save()
-    this.ctx.fillStyle = 'red'
+    this.ctx.fillStyle = '#702963'
     this.ctx.fillRect(this.colToX(), this.rowToY(), this.w, this.h)
+    this.ctx.strokeStyle = 'white';
+    this.ctx.lineWidth = 2
+    this.ctx.strokeRect(this.colToX(), this.rowToY(), this.w, this.h)
     this.ctx.restore()
   }
 
-  set(action) {
+  setTranslation(action) {
     switch (action) {
       case 'rotate':
         break;

@@ -17,10 +17,14 @@ class Matrix {
   }
 
   canSet(figure, action) {
-    return figure.squares.every((square) => this.fit(square, action))
+    const testFigure = figure.clone()
+    if (action === 'rotate') {
+      testFigure.setRotation()
+    }
+    return testFigure.squares.every((square) => this.doesFit(square, action))
   }
   
-  fit(square, action) {
+  doesFit(square, action) {
     let x = 0;
     let y = 0
     switch (action) {
