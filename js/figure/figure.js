@@ -9,6 +9,9 @@ class Figure {
     this.h = this.ctx.canvas.clientHeight / this.rowDim
 
     this.squares = []
+
+    this.xStart = 5
+    this.yStart = -1
   }
 
   setTranslation(action) {

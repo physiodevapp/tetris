@@ -11,7 +11,7 @@ class O_Figure extends Figure {
   create() {
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 2; j++) {
-        const square = new Square(this.ctx, 6 + j, -1 + i, this.w, this.h)
+        const square = new Square(this.ctx, this.xStart + j, this.yStart + i, this.w, this.h)
         this.squares.push(square)
       }
     }

@@ -8,15 +8,15 @@ class Square {
     this.w = w
     this.h = h
 
-    this.ay = 0
+    this.padding = 1
   }
 
   draw() {
     this.ctx.save()
     this.ctx.fillStyle = '#702963'
-    this.ctx.fillRect(this.colToX(), this.rowToY(), this.w, this.h)
-    this.ctx.strokeStyle = 'white';
-    this.ctx.lineWidth = 2
+    this.ctx.strokeStyle = 'transparent'
+    this.ctx.lineWidth = 0
+    this.ctx.fillRect(this.colToX() + this.padding, this.rowToY() + this.padding, this.w - (2 * this.padding), this.h - (2 * this.padding))
     this.ctx.strokeRect(this.colToX(), this.rowToY(), this.w, this.h)
     this.ctx.restore()
   }

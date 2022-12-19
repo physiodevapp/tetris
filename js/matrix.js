@@ -13,7 +13,40 @@ class Matrix {
   }
 
   isOverflow() {
-    return !this.values[0].every((value) => value === null)
+    try { // en ocasiones, al llegar arriba del todo en el tablero, tira un error en game.js porque isOverflow() devuelve false cuando debería devolver true y el juego intenta continuar
+      return !this.values[0].every((value) => value === null)
+    } catch {
+      return true
+    }
+  }
+
+  checkFullRows() {
+    if (this.existsFullRows()) {
+      this.deleteFullRows()
+    }
+  }
+
+  existsFullRows() {
+    return this.values.filter((row) => row .every((value) => value !== null)).length
+  }
+
+  deleteFullRows() {
+    console.log('deleteFullRows')
+    this.values.forEach((row, index) => {
+      if (row.every((value) => value !== null)) {
+        this.values.splice(index, 1)
+        this.values
+          .filter((row, overIndex) => overIndex < index)
+          .forEach((row) => {
+            row
+              .filter((value) => value !== null)
+              .forEach((square) => {
+                square.y++
+              })
+          })
+        this.values.unshift(new Array(this.colDim).fill(null))
+      }
+    })
   }
 
   canSet(figure, action) {
@@ -23,7 +56,7 @@ class Matrix {
     }
     return testFigure.squares.every((square) => this.doesFit(square, action))
   }
-  
+
   doesFit(square, action) {
     let x = 0;
     let y = 0
@@ -44,38 +77,6 @@ class Matrix {
     return square.y + y < this.rowDim &&
       square.x + x < this.colDim &&
       this.values[square.y + y][square.x + x] === null
-  }
-
-  canSetDown(square) {
-    if (square.y >= this.rowDim - 1) {
-      return false
-    }
-    const canDown = !this.values[square.y + 1][square.x];
-
-    return canDown
-  }
-
-  canSetLeftRight(square, leftRight) {
-    // a veces me devuelve error 'cannot read property of undefined' si desplazo horizontalmente sobre la última línea inferior libre antes de almacenar el square
-    // ...hacer un try catch??... parece que funcion
-    let canLeftRight;
-    try {
-      switch (leftRight) {
-        case 'right':
-          canLeftRight = this.values[square.y][square.x + 1] === null
-          break;
-        case 'left':
-          canLeftRight = this.values[square.y][square.x - 1] === null
-          break;
-        default:
-          canLeftRight = false
-      }
-      return canLeftRight
-    } catch (error) {
-      // console.log(error)
-      return false
-    }
-    // return true
   }
 
   freeze(figure) {

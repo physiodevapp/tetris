@@ -12,7 +12,7 @@ class L_Figure extends Figure {
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 3; j++) {
         if (i=== 0 || j === 0) {
-          const square = new Square(this.ctx, 6 + j, -1 + i, this.w, this.h)
+          const square = new Square(this.ctx, this.xStart + j, this.yStart + i, this.w, this.h)
           this.squares.push(square)
         }
       }

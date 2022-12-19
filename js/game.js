@@ -8,15 +8,19 @@ class Game {
     this.intervalId = null
 
     this.action = ''
-    this.dropVel = 1
+
+    this.dropVel = 60
+    this.drop = 0
 
     this.newFigures = []
+
+    this.background = new Background(document.getElementById('grid').getContext('2d'), 12, 24)
+    this.background.draw()
   }
 
   load() {
     this.initInteractions()
     this.initData()
-    // console.log(this.matrix)
   }
 
   initInteractions() {
@@ -52,6 +56,9 @@ class Game {
         case 38:
           this.action = 'rotate'
           break;
+        case 40:
+          this.action = 'down'
+          break;
         default:
           this.action = ''
       }
@@ -71,9 +78,12 @@ class Game {
 
   start() {
     this.intervalId = setInterval(() => {
-      this.check()
-      this.move()
-    }, 1000 / this.dropVel)
+      if (this.drop++ === this.dropVel) {
+        this.drop = 0
+        this.check()
+        this.move()
+      }
+    }, 1000 / 60)
   }
 
   stop() {
@@ -117,16 +127,27 @@ class Game {
       this.end()
     } else if (!this.matrix.canSet(this.figure, this.action)) {
       this.matrix.freeze(this.figure)
+      this.matrix.checkFullRows()
       this.addNewFigure()
     }
   }
 
   addNewFigure() {
-    let newFigure
     while (this.newFigures.length < 2) {
       this.newFigures.push(this.chooseNewFigure())
     }
-    switch (this.newFigures[0]) {
+    this.figure = this.newFigures[0]
+    this.newFigures.shift()
+
+    // console.log('next figure is: ', this.newFigures[0])
+    // console.log(this.figure)
+  }
+
+  chooseNewFigure() {
+    let newFigure;
+    const letters = [73, 74, 76, 79, 83, 84, 90]
+    const index = Math.floor(Math.random() * 7)
+    switch (letters[index]) {
       case 73:
         newFigure = new I_Figure(this.ctx, this.colDim, this.rowDim)
         break;
@@ -149,20 +170,7 @@ class Game {
         newFigure = new Z_Figure(this.ctx, this.colDim, this.rowDim)
         break;
     }
-    this.newFigures.shift()
-
-    // this.figure = newFigure
-    // console.log('next figure is: ', this.newFigures[0])
-    
-    this.figure = new I_Figure(this.ctx, this.colDim, this.rowDim)
-
-    // console.log(this.figure)
-  }
-
-  chooseNewFigure() {
-    const letters = [73, 74, 76, 79, 83, 84, 90]
-    const indexLetter = Math.floor(Math.random() * 7)
-    return letters[indexLetter]
+    return newFigure
   }
 
 

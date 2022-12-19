@@ -1,12 +1,21 @@
 #container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: column nowrap;
-    background-color: black;
-    padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
+  background-color: black;
+  padding: 10px 0;
+}
+
+#container>div:first-child {
+  position: relative;
+}
+
+#grid {
+  background-color: #292b39;
 }
 
 #game {
-    border: 1px solid white
+  position: absolute;
+  left: 0;
 }

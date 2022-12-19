@@ -10,7 +10,7 @@ class I_Figure extends Figure {
 
   create() {
     for (let i = 0; i < 4; i++) {
-      const square = new Square(this.ctx, 6 + i, -1, this.w, this.h)
+      const square = new Square(this.ctx, this.xStart + i, this.yStart, this.w, this.h)
       this.squares.push(square)
     }
     return this.squares
