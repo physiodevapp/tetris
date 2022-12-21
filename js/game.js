@@ -1,24 +1,21 @@
 class Game {
-  constructor(ctx, colDim, rowDim) {
-    this.ctx = ctx
+  constructor(canvas, colDim, rowDim) {
+    this.ctx = canvas.getContext('2d')
 
     this.colDim = colDim
     this.rowDim = rowDim
 
     this.intervalId = null
 
-    this.action = ''
-
     this.dropVel = 60
     this.drop = 0
 
     this.newFigures = []
 
-    this.background = new Background(document.getElementById('grid').getContext('2d'), 12, 24)
-    this.background.draw()
   }
 
   load() {
+    this.initGrid()
     this.initInteractions()
     this.initData()
   }
@@ -28,7 +25,7 @@ class Game {
       switch (ev.target.innerHTML) {
         case 'PLAY':
           ev.target.innerHTML = 'STOP'
-          this.start();
+          this.play();
           break;
         case 'STOP':
           ev.target.innerHTML = 'PLAY'
@@ -46,28 +43,27 @@ class Game {
       if (!this.intervalId) {
         return null
       }
+      let action;
       switch (ev.keyCode) {
         case 39:
-          this.action = 'right'
+          action = 'right'
           break;
         case 37:
-          this.action = 'left'
+          action = 'left'
           break;
         case 38:
-          this.action = 'rotate'
+          action = 'rotate'
           break;
         case 40:
-          this.action = 'down'
+          action = 'down'
           break;
         default:
-          this.action = ''
+          action = ''
       }
 
-      if (this.action) {
-        this.move()
+      if (action) {
+        this.moveFigure(action)
       }
-
-      this.action = ''
     }
   }
 
@@ -76,12 +72,17 @@ class Game {
     this.addNewFigure()
   }
 
-  start() {
+  initGrid() {
+    this.grid = new Grid(canvas.parentElement.firstElementChild.getContext('2d'), this.colDim, this.rowDim)
+    this.grid.draw()
+  }
+
+  play() {
     this.intervalId = setInterval(() => {
-      if (this.drop++ === this.dropVel) {
+      if (this.drop++ >= this.dropVel) {
         this.drop = 0
-        this.check()
-        this.move()
+        this.nextFigure()
+        this.moveFigure('down')
       }
     }, 1000 / 60)
   }
@@ -98,7 +99,7 @@ class Game {
 
   restart() {
     this.initData()
-    this.start()
+    this.play()
   }
 
   clear() {
@@ -110,28 +111,43 @@ class Game {
     this.matrix.draw()
   }
 
-  move() { // Pongo set en vez de move porque realmente visualmente se ve cuando se draw
-    if (this.matrix.canSet(this.figure, this.action)) {
-      if (this.action === 'rotate') {
+  async moveFigure(action = 'down') {
+    if (this.matrix.canSet(this.figure, action)) {
+      if (action === 'rotate') {
         this.figure.setRotation()
       } else {
-        this.figure.setTranslation(this.action)
+        this.figure.setTranslation(action)
       }
-    }
+    } 
+    
     this.clear()
     this.draw()
+    
+    if (this.matrix.isBlocked(this.figure) && !this.matrix.isFreezing) {
+      console.log('BLOCKED')
+      // // this.addNewFigure()
+      this.matrix.freeze(this.figure)
+      await this.matrix.checkFullRows()
+      this.matrix.isFreezing = false
+    }
+
   }
 
-  check() {
-    if (this.matrix.isOverflow()) {
+  async nextFigure() {
+    if (this.matrix.isGameover()) {
       this.end()
-    } else if (!this.matrix.canSet(this.figure, this.action)) {
-      this.matrix.freeze(this.figure)
-      this.matrix.checkFullRows()
+    } else if (!this.matrix.canSet(this.figure, 'down')) {
+      console.log('nextFigure')
+      this.frozenFigure = this.figure
       this.addNewFigure()
+      if (!this.matrix.isFreezing) {
+        this.matrix.freeze(this.frozenFigure)
+        await this.matrix.checkFullRows()
+        this.matrix.isFreezing = false
+      }
     }
   }
-
+  
   addNewFigure() {
     while (this.newFigures.length < 2) {
       this.newFigures.push(this.chooseNewFigure())

@@ -1,4 +1,4 @@
-class Background {
+class Grid {
   constructor(ctx, colDim, rowDim) {
     this.ctx = ctx
 
@@ -10,20 +10,22 @@ class Background {
   }
 
   draw() {
-    console.log('draw background')
     this.ctx.save()
     this.ctx.strokeStyle = '#1c1d2b';
     this.ctx.lineWidth = 1
+
     for (let x = 0; x <= this.ctx.canvas.clientWidth; x += this.w) {
-      for (let y = 0; y <= this.ctx.canvas.clientHeight; y += this.h) {
-        this.ctx.moveTo(x, 0);
-        this.ctx.lineTo(x, this.ctx.canvas.clientHeight);
-        this.ctx.stroke();
-        this.ctx.moveTo(0, y);
-        this.ctx.lineTo(this.ctx.canvas.clientWidth, y);
-        this.ctx.stroke();
-      }
+      this.ctx.moveTo(x, 0);
+      this.ctx.lineTo(x, this.ctx.canvas.clientHeight);
+      this.ctx.stroke();
     }
+
+    for (let y = 0; y <= this.ctx.canvas.clientHeight; y += this.h) {
+      this.ctx.moveTo(0, y);
+      this.ctx.lineTo(this.ctx.canvas.clientWidth, y);
+      this.ctx.stroke();
+    }
+
     this.ctx.restore()
   }
 

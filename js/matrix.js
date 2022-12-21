@@ -4,6 +4,8 @@ class Matrix {
     this.rowDim = rowDim
 
     this.values = this.create()
+
+    this.isFreezing = false
   }
 
   create() {
@@ -12,7 +14,7 @@ class Matrix {
       .map(() => new Array(this.colDim).fill(null))
   }
 
-  isOverflow() {
+  isGameover() {
     try { // en ocasiones, al llegar arriba del todo en el tablero, tira un error en game.js porque isOverflow() devuelve false cuando debería devolver true y el juego intenta continuar
       return !this.values[0].every((value) => value === null)
     } catch {
@@ -20,20 +22,39 @@ class Matrix {
     }
   }
 
-  checkFullRows() {
-    if (this.existsFullRows()) {
-      this.deleteFullRows()
+  async checkFullRows() {
+    const fullRows = this.getFullRows()
+    if (fullRows.length) {
+      await this.deleteFullRows()
+      this.isFreezing = false
     }
   }
 
-  existsFullRows() {
-    return this.values.filter((row) => row .every((value) => value !== null)).length
+  getFullRows() {
+    return this.values.filter((row) => row.every((value) => value !== null))
   }
 
-  deleteFullRows() {
-    console.log('deleteFullRows')
-    this.values.forEach((row, index) => {
+  // CON AWAIT
+  // *********
+  animateRow(row) {
+    let count = 1;
+    return new Promise((resolve) => {
+      const intervalId = setInterval(() => {
+        // row.forEach((square) => square.flick())
+        row.forEach((square) => square.flick(count))
+        if (count++ === (3 * 2)) {
+          clearInterval(intervalId)
+          resolve('animation completed!')
+        }
+      }, 100);
+    })
+  }
+
+  async deleteFullRows() {
+    for (let index = 0; index < this.values.length; index++) {
+      const row = this.values[index]
       if (row.every((value) => value !== null)) {
+        await this.animateRow(row)
         this.values.splice(index, 1)
         this.values
           .filter((row, overIndex) => overIndex < index)
@@ -46,12 +67,59 @@ class Matrix {
           })
         this.values.unshift(new Array(this.colDim).fill(null))
       }
-    })
+    }
+  }
+
+  // SIN AWAIT
+  // *********
+  // deleteFullRows() {
+  //   this.values.forEach(async (row, index) => {
+  //     if (row.every((value) => value !== null)) {
+  //       let count = 1;
+  //       const intervalId = setInterval(() => {
+  //         row.forEach((square) => square.flick(count))
+  //         if (count++ === (2 * 2)) {
+  //           clearInterval(intervalId)
+  //           // console.log('animation completed!')
+  //           this.values.splice(index, 1)
+  //           this.values
+  //             .filter((row, overIndex) => overIndex < index)
+  //             .forEach((row) => {
+  //               row
+  //                 .filter((value) => value !== null)
+  //                 .forEach((square) => {
+  //                   square.y++
+  //                 })
+  //             })
+  //           this.values.unshift(new Array(this.colDim).fill(null))
+
+  //           this.isFreezing = false
+  //         }
+  //       }, 200);
+
+  //     }
+  //   })
+  // }
+
+  isBlocked(figure) {
+    // console.log('is blocked?')
+    const actions = ['left', 'right', 'down']
+    // console.log(actions
+    //   .map((action) => this.canSet(figure, action)))
+    // return false
+    return actions
+      .map((action) => {
+        const result = this.canSet(figure, action)
+        // console.log(result)
+        return result
+      })
+      .every((result) => result === false)
   }
 
   canSet(figure, action) {
-    const testFigure = figure.clone()
+    let testFigure = figure
     if (action === 'rotate') {
+      testFigure = figure.clone()
       testFigure.setRotation()
     }
     return testFigure.squares.every((square) => this.doesFit(square, action))
@@ -74,12 +142,15 @@ class Matrix {
         y++
         break;
     }
+    // console.log(square.y, ' - ', y)
     return square.y + y < this.rowDim &&
       square.x + x < this.colDim &&
       this.values[square.y + y][square.x + x] === null
   }
 
   freeze(figure) {
+    console.log('freeze!')
+    this.isFreezing = true
     figure.squares.forEach((square) => this.values[square.y][square.x] = square)
     // console.log(this.values)
   }

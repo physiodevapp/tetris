@@ -18,7 +18,7 @@ class O_Figure extends Figure {
   }
 
   setRotation() {
-    this.goNextPosition()
+    this.setNextPosition()
     switch (this.position) {
       case 0:
         for (let i = 0; i < this.squares.length; i++) {

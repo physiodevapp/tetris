@@ -7,7 +7,7 @@
   padding: 10px 0;
 }
 
-#container>div:first-child {
+#board {
   position: relative;
 }
 

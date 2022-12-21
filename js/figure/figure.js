@@ -29,7 +29,7 @@ class Figure {
     return figure;
   }
 
-  goNextPosition() {
+  setNextPosition() {
     if (this.positions.includes(this.position + 1)) {
       this.position++
     } else {
