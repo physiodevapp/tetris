@@ -23,9 +23,9 @@ class Square {
     this.ctx.restore()
   }
 
-  flick(count) {
+  flick(state) {
     this.ctx.save()
-    this.ctx.fillStyle = count % 2 ? '#702963' : 'yellow'
+    this.ctx.fillStyle = state % 2 ? '#702963' : 'yellow'
     this.ctx.clearRect(this.colToX() + this.padding, this.rowToY() + this.padding, this.w - (2 * this.padding), this.h - (2 * this.padding));
     this.ctx.beginPath();
     this.ctx.roundRect(this.colToX() + this.padding, this.rowToY() + this.padding, this.w - (2 * this.padding), this.h - (2 * this.padding), [4]);
@@ -35,29 +35,6 @@ class Square {
     this.ctx.strokeRect(this.colToX(), this.rowToY(), this.w, this.h)
     this.ctx.restore()
   }
-
-  // flick() {
-  //   let count = 1;
-  //   return new Promise((resolve) => {
-  //     const intervalId = setInterval(() => {
-  //       console.log('flick count: ', count)
-  //       console.log('modulus ', count % 2)
-  //       this.ctx.save()
-  //       this.ctx.fillStyle = count % 2 ? '#702963' : 'yellow'
-  //       this.ctx.strokeStyle = 'transparent'
-  //       this.ctx.lineWidth = 0
-  //       this.ctx.beginPath();
-  //       this.ctx.roundRect(this.colToX() + this.padding, this.rowToY() + this.padding, this.w - (2 * this.padding), this.h - (2 * this.padding), [4]);
-  //       this.ctx.fill();
-  //       this.ctx.strokeRect(this.colToX(), this.rowToY(), this.w, this.h)
-  //       this.ctx.restore()
-  //       if (count++ === (4 * 2)) {
-  //         clearInterval(intervalId)
-  //         resolve('animation completed!')
-  //       }
-  //     }, 1000);
-  //   })
-  // }
 
   setTranslation(action) {
     switch (action) {

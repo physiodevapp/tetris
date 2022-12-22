@@ -43,7 +43,7 @@ class Game {
       if (!this.intervalId) {
         return null
       }
-      let action;
+      let action = null;
       switch (ev.keyCode) {
         case 39:
           action = 'right'
@@ -57,8 +57,6 @@ class Game {
         case 40:
           action = 'down'
           break;
-        default:
-          action = ''
       }
 
       if (action) {
@@ -113,22 +111,20 @@ class Game {
 
   async moveFigure(action = 'down') {
     if (this.matrix.canSet(this.figure, action)) {
-      if (action === 'rotate') {
-        this.figure.setRotation()
-      } else {
-        this.figure.setTranslation(action)
-      }
-    } 
-    
+      action === 'rotate' ? this.figure.setRotation() : this.figure.setTranslation(action)
+    }
     this.clear()
     this.draw()
-    
-    if (this.matrix.isBlocked(this.figure) && !this.matrix.isFreezing) {
-      console.log('BLOCKED')
-      // // this.addNewFigure()
-      this.matrix.freeze(this.figure)
-      await this.matrix.checkFullRows()
-      this.matrix.isFreezing = false
+
+    if (this.matrix.isBlocked(this.figure) && !this.matrix.isFreezing && !this.matrix.isChecked) {
+      // console.log('figure is blocked > UPDATE MATRIX')
+      this.matrix.isChecked = true
+      // CON AWAIT (parece que la animación al eliminar filas es más fluida...)
+      // *********
+      /*await ??*/this.matrix.freeze(this.figure)
+      // SIN AWAIT
+      // *********
+      // this.matrix.freeze_sync(this.figure)
     }
 
   }
@@ -137,17 +133,21 @@ class Game {
     if (this.matrix.isGameover()) {
       this.end()
     } else if (!this.matrix.canSet(this.figure, 'down')) {
-      console.log('nextFigure')
       this.frozenFigure = this.figure
-      this.addNewFigure()
-      if (!this.matrix.isFreezing) {
-        this.matrix.freeze(this.frozenFigure)
-        await this.matrix.checkFullRows()
-        this.matrix.isFreezing = false
+      this.addNewFigure() // para que no tenga que esperar a completarse el 'freeze()'
+      if (!this.matrix.isFreezing && !this.matrix.isChecked) {
+        // console.log('nextFigure > UPDATE MATRIX')
+        // CON AWAIT (parece que la animación al eliminar filas es más fluida...)
+        // *********
+        /*await ??*/this.matrix.freeze(this.frozenFigure)
+        // SIN AWAIT
+        // *********
+        // this.matrix.freeze_sync(this.frozenFigure)
       }
+      this.matrix.isChecked = false
     }
   }
-  
+
   addNewFigure() {
     while (this.newFigures.length < 2) {
       this.newFigures.push(this.chooseNewFigure())
