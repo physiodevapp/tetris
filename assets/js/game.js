@@ -16,10 +16,10 @@ class Game {
   }
 
   load() {
-    this.initGrid()
-    this.initPanels()
-    this.initInteractions()
     this.initData()
+    this.initGrid()
+    this.initInteractions()
+    this.initPanels()
   }
 
   initPanels() {
@@ -29,6 +29,9 @@ class Game {
 
     this.score = new Score()
     this.score.show()
+
+    this.panelFigure = new PanelFigure()
+    this.panelFigure.showNextFigure(this.newFigures[this.newFigures.length - 1].constructor.name)
   }
 
   initInteractions() {
@@ -146,7 +149,6 @@ class Game {
       // *********
       // this.matrix.freeze_sync(this.figure)
 
-
     }
 
   }
@@ -177,8 +179,11 @@ class Game {
     this.figure = this.newFigures[0]
     this.newFigures.shift()
 
+    if (this.panelFigure) {
+      this.panelFigure.showNextFigure(this.newFigures[this.newFigures.length - 1].constructor.name)
+    }
     // console.log('next figure is: ', this.newFigures[0])
-    // console.log(this.figure)
+    // console.log('current figure ', this.figure)
   }
 
   chooseNewFigure() {
