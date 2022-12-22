@@ -20,32 +20,34 @@ class Matrix {
     }
   }
 
-
-  getFullRows() {
-    return this.values.filter((row) => row.every((value) => value !== null))
-  }
-
   // ===============================================
   // CON AWAIT
   // *********
   async freeze(figure) {
-    this.isFreezing = true
-    figure.squares.forEach((square) => this.values[square.y][square.x] = square)
-    await this.checkFullRows()
-    this.isFreezing = false
+    return new Promise(async (resolve) => {
+      this.isFreezing = true
+      figure.squares.forEach((square) => this.values[square.y][square.x] = square)
+      await this.checkFullRows().then((lines) => {
+        this.isFreezing = false
+        resolve(lines)
+      })
+    })
   }
 
   async checkFullRows() {
-    const fullRows = this.getFullRows()
-    if (fullRows.length) {
-      const squares = fullRows
-        .reduce((acc, curr) => {
-          curr.forEach((square) => acc.push(square))
-          return acc
-        }, [])
-      await this.animateSquares(squares)
-      this.deleteFullRows()
-    }
+    return new Promise(async (resolve) => {
+      const fullRows = this.getFullRows()
+      if (fullRows.length) {
+        const squares = fullRows
+          .reduce((acc, curr) => {
+            curr.forEach((square) => acc.push(square))
+            return acc
+          }, [])
+        await this.animateSquares(squares)
+        this.deleteFullRows()
+      }
+      resolve(fullRows.length)
+    })
   }
 
   animateSquares(squares) {
@@ -62,16 +64,16 @@ class Matrix {
   }
 
   animateRow(row) {
-    let count = 1;
-    return new Promise((resolve) => {
-      const intervalId = setInterval(() => {
-        row.forEach((square) => square.flick(count))
-        if (count++ === (3 * 2)) {
-          clearInterval(intervalId)
-          resolve('animation completed!')
-        }
-      }, 100);
-    })
+    // let count = 1;
+    // return new Promise((resolve) => {
+    //   const intervalId = setInterval(() => {
+    //     row.forEach((square) => square.flick(count))
+    //     if (count++ === (3 * 2)) {
+    //       clearInterval(intervalId)
+    //       resolve('animation completed!')
+    //     }
+    //   }, 100);
+    // })
   }
 
   async deleteFullRows() {
@@ -159,6 +161,10 @@ class Matrix {
   }
 
   // ===============================================
+
+  getFullRows() {
+    return this.values.filter((row) => row.every((value) => value !== null))
+  }
 
   isBlocked(figure) {
     const actions = ['left', 'right', 'down']

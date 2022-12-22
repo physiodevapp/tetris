@@ -1,0 +1,100 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: row nowrap;
+  background-color: black;
+  padding: 10px 0;
+}
+
+#board {
+  position: relative;
+}
+
+#grid {
+  background-color: #292b39;
+}
+
+#game {
+  position: absolute;
+  left: 0;
+  border: 1px solid white;
+}
+
+#info-panel {
+  display: flex;
+  flex-flow: column wrap;
+  border: 0px solid white;
+  margin: 0 0 0 10px;
+}
+
+#score-panel,
+#next-figure-panel {
+  border: 1px solid white;
+}
+
+#next-figure-panel {
+  flex-grow: 2;
+  margin-bottom: 10px;
+}
+
+#score-panel {
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+#next-figure-panel,
+#score-panel {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+}
+
+#next-figure-value {
+  border: 1px solid white;
+  height: 65%;
+  width: 80%;
+  border-radius: 20px;
+}
+
+
+#score-panel>div {
+  width: 80%;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+
+
+#start-stop-btn {
+  margin: 10px 0;
+  width: 80%;
+  height: 30px;
+}
+
+#next-figure-title,
+#score-title,
+#lines-title {
+  color: white;
+  text-transform: uppercase;
+  margin: 10px 0;
+  text-align: center;
+}
+
+#score-value,
+#lines-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  height: 40px;
+  border-radius: 10px;
+  color: white;
+  font-size: 25px;
+}

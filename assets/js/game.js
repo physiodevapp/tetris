@@ -1,6 +1,7 @@
 class Game {
   constructor(canvas, colDim, rowDim) {
-    this.ctx = canvas.getContext('2d')
+    this.canvas = canvas
+    this.ctx = this.canvas.getContext('2d')
 
     this.colDim = colDim
     this.rowDim = rowDim
@@ -16,12 +17,22 @@ class Game {
 
   load() {
     this.initGrid()
+    this.initPanels()
     this.initInteractions()
     this.initData()
   }
 
+  initPanels() {
+    const infoPanel = document.getElementById('info-panel')
+    infoPanel.style.height = `${this.canvas.clientHeight}px`
+    infoPanel.style.width = `${this.canvas.clientWidth * 0.5}px`
+
+    this.score = new Score()
+    this.score.show()
+  }
+
   initInteractions() {
-    document.getElementById('start-stop').onclick = (ev) => {
+    document.getElementById('start-stop-btn').onclick = (ev) => {
       switch (ev.target.innerHTML) {
         case 'PLAY':
           ev.target.innerHTML = 'STOP'
@@ -111,7 +122,16 @@ class Game {
 
   async moveFigure(action = 'down') {
     if (this.matrix.canSet(this.figure, action)) {
-      action === 'rotate' ? this.figure.setRotation() : this.figure.setTranslation(action)
+      if (action === 'down') {
+        this.score.total++
+        this.score.show()
+      }
+
+      if (action === 'rotate') {
+        this.figure.setRotation()
+      } else {
+        this.figure.setTranslation(action)
+      }
     }
     this.clear()
     this.draw()
@@ -121,10 +141,12 @@ class Game {
       this.matrix.isChecked = true
       // CON AWAIT (parece que la animación al eliminar filas es más fluida...)
       // *********
-      /*await ??*/this.matrix.freeze(this.figure)
+      await this.matrix.freeze(this.figure).then((lines) => this.score.linesToScore(lines))
       // SIN AWAIT
       // *********
       // this.matrix.freeze_sync(this.figure)
+
+
     }
 
   }
@@ -139,7 +161,7 @@ class Game {
         // console.log('nextFigure > UPDATE MATRIX')
         // CON AWAIT (parece que la animación al eliminar filas es más fluida...)
         // *********
-        /*await ??*/this.matrix.freeze(this.frozenFigure)
+        await this.matrix.freeze(this.frozenFigure).then((lines) => this.score.linesToScore(lines))
         // SIN AWAIT
         // *********
         // this.matrix.freeze_sync(this.frozenFigure)
