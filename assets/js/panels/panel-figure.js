@@ -17,40 +17,14 @@ class PanelFigure {
     this.h = this.ctx.canvas.clientWidth / this.rowDim
   }
 
-  showNextFigure(type) {
-    // console.log('showNextFigure type ', type )
-    this.createFigure(type)
+  render(type, color) {
+    this.createFigure(type, color)
     this.clear()
     this.figure.draw()
   }
 
-  createFigure(type) {
-    let figure
-    switch (type) {
-      case 'I_Figure':
-        figure = new I_Figure(this.ctx, this.colDim, this.rowDim, true, type)
-        //figure.setRotation()
-        break;
-      case 'J_Figure':
-        figure = new J_Figure(this.ctx, this.colDim, this.rowDim, true, type)
-        break;
-      case 'L_Figure':
-        figure = new L_Figure(this.ctx, this.colDim, this.rowDim, true, type)
-        break;
-      case 'O_Figure':
-        figure = new O_Figure(this.ctx, this.colDim, this.rowDim, true, type)
-        break;
-      case 'S_Figure':
-        figure = new S_Figure(this.ctx, this.colDim, this.rowDim, true, type)
-        break;
-      case 'T_Figure':
-        figure = new T_Figure(this.ctx, this.colDim, this.rowDim, true, type)
-        break;
-      case 'Z_Figure':
-        figure = new Z_Figure(this.ctx, this.colDim, this.rowDim, true, type)
-        break;
-    }
-    this.figure = figure
+  createFigure(type, color) {
+    this.figure = new Random().getFigure(this.ctx, this.colDim, this.rowDim, true, [type], color)
   }
 
   clear() {

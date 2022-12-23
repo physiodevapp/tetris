@@ -1,6 +1,8 @@
 class J_Figure extends Figure {
-  constructor(ctx, colDim, rowDim, isPanel, typePanel) {
-    super(ctx, colDim, rowDim, isPanel, typePanel)
+  constructor(ctx, colDim, rowDim, isPanel, type, color) {
+    super(ctx, colDim, rowDim, isPanel, type, color)
+
+    this.color = color
 
     this.position = 0;
     this.positions = [0, 1, 2, 3]
@@ -12,7 +14,7 @@ class J_Figure extends Figure {
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 3; j++) {
         if (i === 0 || j === 2) {
-          const square = new Square(this.ctx, this.xStart + j, this.yStart + i, this.w, this.h)
+          const square = new Square(this.ctx, this.xStart + j, this.yStart + i, this.w, this.h, this.color)
           this.squares.push(square)
         }
       }

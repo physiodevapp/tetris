@@ -1,5 +1,5 @@
 class Figure {
-  constructor(ctx, colDim, rowDim, isPanel = false, typePanel = null) {
+  constructor(ctx, colDim, rowDim, isPanel = false, type = null, color = 'white') {
     this.ctx = ctx
 
     this.colDim = colDim
@@ -8,10 +8,15 @@ class Figure {
     this.w = this.ctx.canvas.clientWidth / this.colDim
     this.h = this.ctx.canvas.clientHeight / this.rowDim
 
-    this.xStart = !isPanel ? 5 : typePanel === 'I_Figure' ? 0 : typePanel === 'O_Figure' ? 1 : 0.5
-    this.yStart = !isPanel ? -1 : typePanel === 'I_Figure' ? 1.5 : 1
+    this.xStart = !isPanel ? 5 : type === 73 ? 0 : type === 79 ? 1 : 0.5
+    this.yStart = !isPanel ? -1 : type === 73 ? 1.5 : 1
     
     this.squares = []
+
+    this.isPanel = isPanel
+    this.type = type 
+
+    this.color = color
   }
 
   setTranslation(action) {

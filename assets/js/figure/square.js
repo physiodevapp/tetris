@@ -1,5 +1,5 @@
 class Square {
-  constructor(ctx, col, row, w, h) {
+  constructor(ctx, col, row, w, h, color = 'white') {
     this.ctx = ctx
 
     this.x = col
@@ -8,31 +8,39 @@ class Square {
     this.w = w
     this.h = h
 
-    this.padding = 1
+    this.color = color
   }
 
   draw() {
     this.ctx.save()
-    this.ctx.fillStyle = '#702963'
+    this.ctx.fillStyle = this.color //'#702963'
     this.ctx.beginPath();
-    this.ctx.roundRect(this.colToX() + this.padding, this.rowToY() + this.padding, this.w - (2 * this.padding), this.h - (2 * this.padding), [4]);
+    this.ctx.roundRect(this.colToX() + SQUARE_PADDING - (0.5 * GRID_LINE_WIDTH * SQUARE_PADDING), this.rowToY() + SQUARE_PADDING - (0.5 * GRID_LINE_WIDTH * SQUARE_PADDING), this.w - SQUARE_PADDING - (2 * GRID_LINE_WIDTH), this.h - SQUARE_PADDING - (2 * GRID_LINE_WIDTH), [4]);
     this.ctx.fill();
+    /*
     this.ctx.strokeStyle = '#292b39'
     this.ctx.lineWidth = 0
     this.ctx.strokeRect(this.colToX(), this.rowToY(), this.w, this.h)
-    this.ctx.restore()
+    */
+   this.ctx.restore()
+  }
+
+  highlight() {
+    this.flick(0)
   }
 
   flick(state) {
     this.ctx.save()
-    this.ctx.fillStyle = state % 2 ? '#702963' : 'yellow'
-    this.ctx.clearRect(this.colToX() + this.padding, this.rowToY() + this.padding, this.w - (2 * this.padding), this.h - (2 * this.padding));
+    this.ctx.fillStyle = state % 2 ? 'red' : 'white'
+    this.ctx.clearRect(this.colToX() + SQUARE_PADDING - (0.5 * GRID_LINE_WIDTH * SQUARE_PADDING), this.rowToY() + SQUARE_PADDING - (0.5 * GRID_LINE_WIDTH * SQUARE_PADDING), this.w - SQUARE_PADDING - (2 * GRID_LINE_WIDTH), this.h - SQUARE_PADDING - (2 * GRID_LINE_WIDTH));
     this.ctx.beginPath();
-    this.ctx.roundRect(this.colToX() + this.padding, this.rowToY() + this.padding, this.w - (2 * this.padding), this.h - (2 * this.padding), [4]);
+    this.ctx.roundRect(this.colToX() + SQUARE_PADDING - (0.5 * GRID_LINE_WIDTH * SQUARE_PADDING), this.rowToY() + SQUARE_PADDING - (0.5 * GRID_LINE_WIDTH * SQUARE_PADDING), this.w - SQUARE_PADDING - (2 * GRID_LINE_WIDTH), this.h - SQUARE_PADDING - (2 * GRID_LINE_WIDTH), [4]);
     this.ctx.fill();
+    /*
     this.ctx.strokeStyle = '#292b39'
     this.ctx.lineWidth = 0
     this.ctx.strokeRect(this.colToX(), this.rowToY(), this.w, this.h)
+    */
     this.ctx.restore()
   }
 

@@ -27,9 +27,9 @@ class Matrix {
     return new Promise(async (resolve) => {
       this.isFreezing = true
       figure.squares.forEach((square) => this.values[square.y][square.x] = square)
-      await this.checkFullRows().then((lines) => {
+      await this.checkFullRows().then((linePacks) => {
         this.isFreezing = false
-        resolve(lines)
+        resolve(linePacks)
       })
     })
   }
@@ -38,132 +38,77 @@ class Matrix {
     return new Promise(async (resolve) => {
       const fullRows = this.getFullRows()
       if (fullRows.length) {
+        const linePacks = this.getFullRowPacks()
         const squares = fullRows
           .reduce((acc, curr) => {
             curr.forEach((square) => acc.push(square))
             return acc
           }, [])
-        await this.animateSquares(squares)
-        this.deleteFullRows()
+        this.highlightSquares(squares)
+        this.animateSquares(squares)
+        setTimeout(async () => {          
+          await this.deleteFullRows().then(() => {
+            clearInterval(this.intervalId)
+            resolve(linePacks)
+          })
+        }, 750)
+      } else {
+        resolve([])
       }
-      resolve(fullRows.length)
     })
+  }
+
+  highlightSquares(squares) {
+    squares.forEach((square) => square.highlight())
   }
 
   animateSquares(squares) {
-    let state = 1;
-    return new Promise((resolve) => {
-      const intervalId = setInterval(() => {
+    let state = 1
+    this.intervalId = setInterval(() => {
         squares.forEach((square) => square.flick(state))
-        if (state++ === (3 * 2)) {
-          clearInterval(intervalId)
-          resolve('animation completed!')
-        }
+        state++
       }, 100);
+  }
+
+  deleteFullRows() {
+    return new Promise((resolve) => {
+      for (let index = 0; index <= this.values.length; index++) {
+        if (index === this.values.length) {
+          resolve('deletion completed!')
+        }
+        const row = this.values[index]
+        if (row.every((value) => value !== null)) {
+          this.values.splice(index, 1)
+          this.values
+            .filter((row, overIndex) => overIndex < index)
+            .forEach((row) => {
+              row
+                .filter((value) => value !== null)
+                .forEach((square) => {
+                  square.y++
+                })
+            })
+          this.values.unshift(new Array(this.colDim).fill(null))
+        }
+      }      
     })
   }
 
-  animateRow(row) {
-    // let count = 1;
-    // return new Promise((resolve) => {
-    //   const intervalId = setInterval(() => {
-    //     row.forEach((square) => square.flick(count))
-    //     if (count++ === (3 * 2)) {
-    //       clearInterval(intervalId)
-    //       resolve('animation completed!')
-    //     }
-    //   }, 100);
-    // })
+  getFullRowPacks() {
+    return this.values
+      .reduce((acc, row) => {
+        this.isFullRow(row) ? acc[acc.length - 1]++ : acc.push(0) 
+        return acc
+      }, [0])
+      .filter((value) => value)
   }
-
-  async deleteFullRows() {
-    for (let index = 0; index < this.values.length; index++) {
-      const row = this.values[index]
-      if (row.every((value) => value !== null)) {
-        // await this.animateRow(row)
-        this.values.splice(index, 1)
-        this.values
-          .filter((row, overIndex) => overIndex < index)
-          .forEach((row) => {
-            row
-              .filter((value) => value !== null)
-              .forEach((square) => {
-                square.y++
-              })
-          })
-        this.values.unshift(new Array(this.colDim).fill(null))
-      }
-    }
-  }
-
-  // SIN AWAIT
-  // *********
-  freeze_sync(figure) {
-    this.isFreezing = true
-    figure.squares.forEach((square) => this.values[square.y][square.x] = square)
-    this.checkFullRows_sync()
-    // this.isFreezing = false => va en el checkFullRows_sync()
-  }
-
-  checkFullRows_sync() {
-    const fullRows = this.getFullRows()
-    if (fullRows.length) {
-      const squares = fullRows
-        .reduce((acc, curr) => {
-          curr.forEach((square) => acc.push(square))
-          return acc
-        }, [])
-      this.animateSquares_sync(squares)
-      this.deleteFullRows_sync()
-      // this.isFreezing = false => va en el deleteFullRows_sync()
-    } else {
-      this.isFreezing = false
-    }
-  }
-
-  animateSquares_sync(squares) {
-    let state = 1;
-    const intervalId = setInterval(() => {
-      squares.forEach((square) => square.flick(state))
-      if (state++ === (3 * 2)) {
-        clearInterval(intervalId)
-      }
-    }, 100);
-  }
-
-  deleteFullRows_sync() {
-    this.values.forEach(async (row, index) => {
-      if (row.every((value) => value !== null)) {
-        let count = 1;
-        const intervalId = setInterval(() => {
-          row.forEach((square) => square.flick(count))
-          if (count++ === (2 * 2)) {
-            clearInterval(intervalId)
-            // console.log('animation completed!')
-            this.values.splice(index, 1)
-            this.values
-              .filter((row, overIndex) => overIndex < index)
-              .forEach((row) => {
-                row
-                  .filter((value) => value !== null)
-                  .forEach((square) => {
-                    square.y++
-                  })
-              })
-            this.values.unshift(new Array(this.colDim).fill(null))
-
-            this.isFreezing = false
-          }
-        }, 200);
-
-      }
-    })
-  }
-
-  // ===============================================
 
   getFullRows() {
-    return this.values.filter((row) => row.every((value) => value !== null))
+    return this.values.filter((row) => this.isFullRow(row))
+  }
+
+  isFullRow(row) {
+    return row.every((value) => value !== null)
   }
 
   isBlocked(figure) {
