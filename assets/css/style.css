@@ -40,12 +40,12 @@ body {
 }
 
 #next-figure-panel {
-  flex-grow: 2;
+  flex-grow: 1;
   margin-bottom: 10px;
 }
 
 #score-panel {
-  flex-grow: 1;
+  flex-grow: 2;
   justify-content: space-between;
 }
 
@@ -61,7 +61,7 @@ body {
   justify-content: center;
   align-items: center;
   border: 1px solid white;
-  height: 65%;
+  height: 50%;
   width: 80%;
   border-radius: 20px;
 }

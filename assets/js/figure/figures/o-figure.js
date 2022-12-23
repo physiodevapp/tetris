@@ -1,6 +1,6 @@
 class O_Figure extends Figure {
-  constructor(ctx, colDim, rowDim, isPanel) {
-    super(ctx, colDim, rowDim, isPanel)
+  constructor(ctx, colDim, rowDim, isPanel, typePanel) {
+    super(ctx, colDim, rowDim, isPanel, typePanel)
 
     this.position = 0
     this.positions = [0]

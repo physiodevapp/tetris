@@ -2,16 +2,16 @@ class PanelFigure {
   constructor() {
     this.container = document.getElementById('next-figure-value')
 
-    this.colDim = 3
-    this.rowDim = 3
+    this.colDim = 4
+    this.rowDim = 4
 
     this.setCanvas()
   }
 
   setCanvas(){
     const canvas = document.querySelector('#panel-figure')
-    canvas.setAttribute('width', this.container.clientWidth)
-    canvas.setAttribute('height', this.container.clientWidth)
+    canvas.setAttribute('width', this.container.clientWidth -10)
+    canvas.setAttribute('height', this.container.clientWidth - 10)
     this.ctx = canvas.getContext('2d')
     this.w = this.ctx.canvas.clientWidth / this.colDim
     this.h = this.ctx.canvas.clientWidth / this.rowDim
@@ -28,32 +28,29 @@ class PanelFigure {
     let figure
     switch (type) {
       case 'I_Figure':
-        figure = new I_Figure(this.ctx, this.colDim, this.rowDim, true)
+        figure = new I_Figure(this.ctx, this.colDim, this.rowDim, true, type)
+        //figure.setRotation()
         break;
       case 'J_Figure':
-        figure = new J_Figure(this.ctx, this.colDim, this.rowDim, true)
+        figure = new J_Figure(this.ctx, this.colDim, this.rowDim, true, type)
         break;
       case 'L_Figure':
-        figure = new L_Figure(this.ctx, this.colDim, this.rowDim, true)
+        figure = new L_Figure(this.ctx, this.colDim, this.rowDim, true, type)
         break;
       case 'O_Figure':
-        figure = new O_Figure(this.ctx, this.colDim, this.rowDim, true)
+        figure = new O_Figure(this.ctx, this.colDim, this.rowDim, true, type)
         break;
       case 'S_Figure':
-        figure = new S_Figure(this.ctx, this.colDim, this.rowDim, true)
+        figure = new S_Figure(this.ctx, this.colDim, this.rowDim, true, type)
         break;
       case 'T_Figure':
-        figure = new T_Figure(this.ctx, this.colDim, this.rowDim, true)
+        figure = new T_Figure(this.ctx, this.colDim, this.rowDim, true, type)
         break;
       case 'Z_Figure':
-        figure = new Z_Figure(this.ctx, this.colDim, this.rowDim, true)
+        figure = new Z_Figure(this.ctx, this.colDim, this.rowDim, true, type)
         break;
     }
     this.figure = figure
-  }
-
-  draw() {
-
   }
 
   clear() {

@@ -1,5 +1,5 @@
 class Figure {
-  constructor(ctx, colDim, rowDim, isPanel = false) {
+  constructor(ctx, colDim, rowDim, isPanel = false, typePanel = null) {
     this.ctx = ctx
 
     this.colDim = colDim
@@ -8,8 +8,8 @@ class Figure {
     this.w = this.ctx.canvas.clientWidth / this.colDim
     this.h = this.ctx.canvas.clientHeight / this.rowDim
 
-    this.xStart = isPanel ? 0 : 5
-    this.yStart = isPanel ? 0 : -1
+    this.xStart = !isPanel ? 5 : typePanel === 'I_Figure' ? 0 : typePanel === 'O_Figure' ? 1 : 0.5
+    this.yStart = !isPanel ? -1 : typePanel === 'I_Figure' ? 1.5 : 1
     
     this.squares = []
   }
