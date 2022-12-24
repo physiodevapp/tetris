@@ -59,6 +59,14 @@ class Game {
   }
 
   initInteractions() {
+    document.onfullscreenchange = (ev) => {
+      if(!document.fullscreenElement) {
+        console.log('exit using esc')
+        document.getElementById('start-stop-btn').innerHTML = 'RESUME'
+        this.stop()
+      }
+    }
+
     document.getElementById('start-stop-btn').onclick = (ev) => {
       switch (ev.target.innerHTML) {
         case 'PLAY':

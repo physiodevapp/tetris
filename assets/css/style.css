@@ -87,7 +87,7 @@ body {
   justify-content: center;
   align-items: center;
   border: 1px dashed white;
-  height: 56%;
+  height: 60%;
   width: 80%;
   border-radius: 50px;
   background-color: rgba(0,0,0,0.4);
@@ -107,6 +107,7 @@ body {
   font-weight: bold;
   font-family: cursive;
   border-radius: 20px 4px;
+  margin-top: 40px;
 }
 
 #next-figure-title,
