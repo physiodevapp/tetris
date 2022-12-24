@@ -16,7 +16,7 @@ class Game {
     this.isIntervalPaused = false
 
     this.random = new Random()
-  
+
   }
 
   load() {
@@ -25,6 +25,23 @@ class Game {
     this.initInteractions()
     this.initPanels()
   }
+
+  openFullscreen(elem) {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* Safari */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE11 */
+      elem.msRequestFullscreen();
+    }
+  }
+
+  exitFullScreen() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen()
+    }
+  }
+
 
   initPanels() {
     const infoPanel = document.getElementById('info-panel')
@@ -41,15 +58,17 @@ class Game {
     )
   }
 
-  initInteractions() {    
+  initInteractions() {
     document.getElementById('start-stop-btn').onclick = (ev) => {
       switch (ev.target.innerHTML) {
         case 'PLAY':
         case 'RESUME':
+          this.openFullscreen(this.canvas.parentElement.parentElement)
           ev.target.innerHTML = 'PAUSE'
           this.play();
           break;
         case 'PAUSE':
+          this.exitFullScreen()
           ev.target.innerHTML = 'RESUME'
           this.stop();
           break;
@@ -194,6 +213,6 @@ class Game {
         this.newFigures[this.newFigures.length - 1].color
       )
     }
-  }  
+  }
 
 }
