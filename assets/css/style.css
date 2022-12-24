@@ -2,6 +2,7 @@ html,
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
 #container {
@@ -10,21 +11,43 @@ body {
   align-items: center;
   flex-flow: row nowrap;
   background-color: black;
-  padding: 10px 0;
+  padding: 0;
+  height: 100%;
+  /*
+  background-image: url(https://img.freepik.com/premium-photo/colorful-abstract-geometric-3d-background-with-cubes-elements-colors-your-design-3d-render_550395-858.jpg?w=2000);
+  background-position: right;
+  background-repeat: no-repeat;
+  */
+  background-image: url(https://media.istockphoto.com/id/480532094/vector/cube-diamond-abstract-background.jpg?s=612x612&w=0&k=20&c=ZRQaSq_Dcbuavc_c2Z6COUu-M7YL6iMnHGaZ9bOY8f0=);
+  background-position: right;
+  background-repeat: repeat-x;
 }
 
 #board {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 18px 0px 0px 18px;
+  border: 1px solid white;
+  padding: 1px;
+  backdrop-filter: blur(15px);
 }
 
 #grid {
-  background-color: #292b39;  
+  /* 
+  background-color:  white !important;  
+  background-color:  #292b39; 
+  */
+  background-color: rgba(0,0,0,0.45);
+  border-radius: 18px 0px 0px 18px; 
 }
 
 #game {
   position: absolute;
   left: 0;
-  border: 1px solid white;
+  border: 0px solid white;
+  border-radius: 20px 0px 0px 20px;
 }
 
 #info-panel {
@@ -37,16 +60,19 @@ body {
 #score-panel,
 #next-figure-panel {
   border: 1px solid white;
+  backdrop-filter: blur(15px);
 }
 
 #next-figure-panel {
   flex-grow: 1;
   margin-bottom: 10px;
+  border-radius: 0px 20px;
 }
 
 #score-panel {
   flex-grow: 2;
   justify-content: space-between;
+  border-radius: 20px 0px;
 }
 
 #next-figure-panel,
@@ -60,12 +86,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid white;
-  height: 50%;
+  border: 1px dashed white;
+  height: 56%;
   width: 80%;
-  border-radius: 20px;
+  border-radius: 50px;
+  background-color: rgba(0,0,0,0.4);
 }
-
 
 #score-panel>div {
   width: 80%;
@@ -74,11 +100,13 @@ body {
   justify-content: center;
 }
 
-
 #start-stop-btn {
   margin: 10px 0;
   width: 80%;
-  height: 30px;
+  height: 40px;
+  font-weight: bold;
+  font-family: cursive;
+  border-radius: 20px 4px;
 }
 
 #next-figure-title,
@@ -88,6 +116,8 @@ body {
   text-transform: uppercase;
   margin: 10px 0;
   text-align: center;
+  font-weight: bold;
+  font-family: cursive;
 }
 
 #score-value,
@@ -95,7 +125,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid white;
+  border: 2px solid white;
   height: 40px;
   border-radius: 10px;
   color: white;

@@ -8,7 +8,7 @@ class Figure {
     this.w = this.ctx.canvas.clientWidth / this.colDim
     this.h = this.ctx.canvas.clientHeight / this.rowDim
 
-    this.xStart = !isPanel ? 5 : type === 73 ? 0 : type === 79 ? 1 : 0.5
+    this.xStart = !isPanel ? ((COL_DIM / 2) - 1) : type === 73 ? 0 : type === 79 ? 1 : 0.5
     this.yStart = !isPanel ? -1 : type === 73 ? 1.5 : 1
     
     this.squares = []

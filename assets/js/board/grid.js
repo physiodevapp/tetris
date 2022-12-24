@@ -11,7 +11,7 @@ class Grid {
 
   draw() {
     this.ctx.save()
-    this.ctx.strokeStyle = '#1c1d2b';
+    this.ctx.strokeStyle = GRID_LINE_COLOR;
     this.ctx.lineWidth = GRID_LINE_WIDTH
 
     for (let x = 0; x < this.ctx.canvas.clientWidth; x += this.w) {

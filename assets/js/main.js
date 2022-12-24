@@ -1,4 +1,4 @@
 
 const canvas = document.getElementById('game')
-const game = new Game(canvas, 12, 24)
+const game = new Game(canvas, COL_DIM, ROW_DIM)
 game.load()

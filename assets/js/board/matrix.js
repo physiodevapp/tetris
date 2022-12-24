@@ -20,9 +20,6 @@ class Matrix {
     }
   }
 
-  // ===============================================
-  // CON AWAIT
-  // *********
   async freeze(figure) {
     return new Promise(async (resolve) => {
       this.isFreezing = true
@@ -131,25 +128,29 @@ class Matrix {
   }
 
   doesFit(square, action) {
-    let x = 0;
-    let y = 0
-    switch (action) {
-      case 'rotate':
-        break;
-      case 'left':
-        x--
-        break;
-      case 'right':
-        x++
-        break;
-      case 'down':
-      default:
-        y++
-        break;
+    try {
+      let x = 0;
+      let y = 0
+      switch (action) {
+        case 'rotate':
+          break;
+        case 'left':
+          x--
+          break;
+        case 'right':
+          x++
+          break;
+        case 'down':
+        default:
+          y++
+          break;
+      }
+      return square.y + y < this.rowDim &&
+        square.x + x < this.colDim &&
+        this.values[square.y + y][square.x + x] === null
+    } catch(error) {
+      return false
     }
-    return square.y + y < this.rowDim &&
-      square.x + x < this.colDim &&
-      this.values[square.y + y][square.x + x] === null
   }
 
   draw() {

@@ -28,7 +28,7 @@ class Game {
 
   initPanels() {
     const infoPanel = document.getElementById('info-panel')
-    infoPanel.style.height = `${this.canvas.clientHeight}px`
+    infoPanel.style.height = `${this.canvas.parentElement.offsetHeight}px`
     infoPanel.style.width = `${this.canvas.clientWidth * 0.5}px`
 
     this.score = new Score()
@@ -45,15 +45,16 @@ class Game {
     document.getElementById('start-stop-btn').onclick = (ev) => {
       switch (ev.target.innerHTML) {
         case 'PLAY':
-          ev.target.innerHTML = 'STOP'
+        case 'RESUME':
+          ev.target.innerHTML = 'PAUSE'
           this.play();
           break;
-        case 'STOP':
-          ev.target.innerHTML = 'PLAY'
+        case 'PAUSE':
+          ev.target.innerHTML = 'RESUME'
           this.stop();
           break;
         case 'RESTART':
-          ev.target.innerHTML = 'STOP'
+          ev.target.innerHTML = 'RESUME'
           this.restart();
           break;
       }
@@ -99,8 +100,12 @@ class Game {
     this.intervalId = setInterval(() => {
       if (this.drop++ >= this.dropVel && !this.isIntervalPaused) {
         this.drop = 0
-        this.nextFigure()
-        this.moveFigure()
+        if (this.matrix.isGameover()) {
+          this.end()
+        } else {
+          this.nextFigure()
+          this.moveFigure()
+        }
       }
     }, 1000 / 60)
   }
@@ -161,9 +166,7 @@ class Game {
   }
 
   nextFigure() {
-    if (this.matrix.isGameover()) {
-      this.end()
-    } else if (!this.matrix.canSet(this.figure, 'down')) {
+    if (!this.matrix.canSet(this.figure, 'down')) {
       this.frozenFigure = this.figure
       this.addNewFigure() // para que no tenga que esperar a completarse el 'freeze()'
       if (!this.matrix.isFreezing && !this.matrix.isChecked) {
