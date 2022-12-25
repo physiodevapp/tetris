@@ -71,7 +71,7 @@ class Game {
       switch (ev.target.innerHTML) {
         case 'PLAY':
         case 'RESUME':
-          this.openFullscreen(this.canvas.parentElement.parentElement)
+          // this.openFullscreen(this.canvas.parentElement.parentElement)
           ev.target.innerHTML = 'PAUSE'
           this.play();
           break;
@@ -131,7 +131,7 @@ class Game {
           this.end()
         } else {
           this.nextFigure()
-          this.moveFigure()
+          // this.moveFigure()
         }
       }
     }, 1000 / 60)
@@ -162,6 +162,10 @@ class Game {
   }
 
   moveFigure(action = '') {
+    // console.log('moveFigure ', action, ' ', this.isIntervalPaused)
+    if (this.isIntervalPaused) {
+      return null
+    }
     if (this.matrix.canSet(this.figure, action)) {
       if (action === 'down') {
         this.score.total++
@@ -180,6 +184,7 @@ class Game {
       this.matrix.isChecked = true
       this.isIntervalPaused = true
       this.matrix.freeze(this.figure).then((linePacks) => {
+        console.log('moveFigure then, ', this.matrix.intervalIds)
         this.score.linesToScore(linePacks)
         this.score.render()
         this.isIntervalPaused = false
@@ -195,16 +200,25 @@ class Game {
   nextFigure() {
     if (!this.matrix.canSet(this.figure, 'down')) {
       this.frozenFigure = this.figure
+      // console.log('addNewFigure')
       this.addNewFigure() // para que no tenga que esperar a completarse el 'freeze()'
       if (!this.matrix.isFreezing && !this.matrix.isChecked) {
         this.isIntervalPaused = true
         this.matrix.freeze(this.frozenFigure).then((linePacks) => {
+          // console.log('nextFigure then ', this.matrix.intervalIds)
           this.score.linesToScore(linePacks)
           this.score.render()
           this.isIntervalPaused = false
+
+          this.moveFigure()
         })
+      } else {
+        console.log('nextFigure NOT then')
+        this.moveFigure()
       }
       this.matrix.isChecked = false
+    } else {
+      this.moveFigure()
     }
   }
 

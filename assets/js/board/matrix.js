@@ -4,6 +4,8 @@ class Matrix {
     this.rowDim = rowDim
 
     this.values = this.create()
+
+    this.intervalIds = []
   }
 
   create() {
@@ -12,6 +14,7 @@ class Matrix {
       .map(() => new Array(this.colDim).fill(null))
   }
 
+  // TODO: Revisar la función isGameover, quizas ponerla en el hame.js y revisarla alli
   isGameover() {
     try { // en ocasiones, al llegar arriba del todo en el tablero, tira un error en game.js porque isOverflow() devuelve false cuando debería devolver true y el juego intenta continuar
       return !this.values[0].every((value) => value === null)
@@ -41,31 +44,98 @@ class Matrix {
             curr.forEach((square) => acc.push(square))
             return acc
           }, [])
-        this.highlightSquares(squares)
-        this.animateSquares(squares)
-        setTimeout(async () => {          
-          await this.deleteFullRows().then(() => {
-            clearInterval(this.intervalId)
-            resolve(linePacks)
-          })
-        }, 750)
+
+        /*
+        this.animateAllSquares(squares)
+        */
+        await this.animateRows(fullRows, squares).then(async (resp) => {
+          console.log(resp)
+          setTimeout(async () => {
+            await this.deleteFullRows().then(() => {
+              clearInterval(this.intervalId)
+              this.intervalIds.forEach((intervalId) => clearInterval(intervalId))
+              resolve(linePacks)
+            })
+          }, 1000)
+        })
+
+        // setTimeout(async () => {
+        //   await this.deleteFullRows().then(() => {
+        //     clearInterval(this.intervalId)
+        //     this.intervalIds.forEach((intervalId) => clearInterval(intervalId))
+        //     resolve(linePacks)
+        //   })
+        // }, 1000)
+
       } else {
         resolve([])
       }
     })
   }
 
-  highlightSquares(squares) {
-    squares.forEach((square) => square.highlight())
+  // ***********************ANIMATIONS**************************
+
+  animateRows(rows, squares) {
+    // squares.forEach((square) => square.highlight())
+    // rows.forEach((row) => this.animateRow(row))
+    return new Promise(async (resolve) => {
+      squares.forEach((square) => square.highlight())
+      for (let i = 0; i < rows.length; i++) {
+        this.animateRow(rows[i]).then((resp) => {
+          this.animateSquaresInRow(rows[i])
+        })
+        if (i === rows.length - 1) {
+          resolve('all animateRow launched!')
+        }
+      }
+    })
   }
 
-  animateSquares(squares) {
-    let state = 1
-    this.intervalId = setInterval(() => {
-        squares.forEach((square) => square.flick(state))
-        state++
-      }, 100);
+  animateRow(row) {
+    // let index = 0
+    // const intervalId = setInterval(() => {
+    //   row[index].hide()
+    //   index++
+    //   if (index === COL_DIM) {
+    //     this.animateSquaresInRow(row)
+    //     clearInterval(intervalId)
+    //   }
+    // }, 50)
+
+    return new Promise((resolve) => {
+      let index = 0
+      const intervalId = setInterval(() => {
+        row[index].hide()
+        index++
+        if (index === COL_DIM) {
+          //this.animateSquaresInRow(row)
+          clearInterval(intervalId)
+          resolve('animateRow completed!')
+        }
+      }, 50)
+    })
   }
+
+  animateSquaresInRow(row) {
+    let state = 1
+    const intervalId = setInterval(() => {
+      row.forEach((square) => square.flick(state))
+      state++
+    }, 100);
+    this.intervalIds.push(intervalId)
+  }
+
+  animateAllSquares(squares) {
+    squares.forEach((square) => square.highlight())
+    let state = 1
+    const intervalId = setInterval(() => {
+      squares.forEach((square) => square.flick(state))
+      state++
+    }, 100);
+    this.intervalIds.push(intervalId)
+  }
+
+  // *************************************************
 
   deleteFullRows() {
     return new Promise((resolve) => {
@@ -87,14 +157,14 @@ class Matrix {
             })
           this.values.unshift(new Array(this.colDim).fill(null))
         }
-      }      
+      }
     })
   }
 
   getFullRowPacks() {
     return this.values
       .reduce((acc, row) => {
-        this.isFullRow(row) ? acc[acc.length - 1]++ : acc.push(0) 
+        this.isFullRow(row) ? acc[acc.length - 1]++ : acc.push(0)
         return acc
       }, [0])
       .filter((value) => value)
@@ -148,7 +218,7 @@ class Matrix {
       return square.y + y < this.rowDim &&
         square.x + x < this.colDim &&
         this.values[square.y + y][square.x + x] === null
-    } catch(error) {
+    } catch (error) {
       return false
     }
   }
