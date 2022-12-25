@@ -14,13 +14,8 @@ class Matrix {
       .map(() => new Array(this.colDim).fill(null))
   }
 
-  // TODO: Revisar la función isGameover, quizas ponerla en el hame.js y revisarla alli
-  isGameover() {
-    try { // en ocasiones, al llegar arriba del todo en el tablero, tira un error en game.js porque isOverflow() devuelve false cuando debería devolver true y el juego intenta continuar
-      return !this.values[0].every((value) => value === null)
-    } catch {
-      return true
-    }
+  canFreeze() {
+    return !this.matrix.isFreezing && !this.matrix.isChecked
   }
 
   async freeze(figure) {
@@ -45,9 +40,6 @@ class Matrix {
             return acc
           }, [])
 
-        /*
-        this.animateAllSquares(squares)
-        */
         await this.animateRows(fullRows, squares).then(async (resp) => {
           console.log(resp)
           setTimeout(async () => {
@@ -58,15 +50,6 @@ class Matrix {
             })
           }, 1000)
         })
-
-        // setTimeout(async () => {
-        //   await this.deleteFullRows().then(() => {
-        //     clearInterval(this.intervalId)
-        //     this.intervalIds.forEach((intervalId) => clearInterval(intervalId))
-        //     resolve(linePacks)
-        //   })
-        // }, 1000)
-
       } else {
         resolve([])
       }
@@ -76,8 +59,6 @@ class Matrix {
   // ***********************ANIMATIONS**************************
 
   animateRows(rows, squares) {
-    // squares.forEach((square) => square.highlight())
-    // rows.forEach((row) => this.animateRow(row))
     return new Promise(async (resolve) => {
       squares.forEach((square) => square.highlight())
       for (let i = 0; i < rows.length; i++) {
@@ -92,23 +73,12 @@ class Matrix {
   }
 
   animateRow(row) {
-    // let index = 0
-    // const intervalId = setInterval(() => {
-    //   row[index].hide()
-    //   index++
-    //   if (index === COL_DIM) {
-    //     this.animateSquaresInRow(row)
-    //     clearInterval(intervalId)
-    //   }
-    // }, 50)
-
     return new Promise((resolve) => {
       let index = 0
       const intervalId = setInterval(() => {
         row[index].hide()
         index++
         if (index === COL_DIM) {
-          //this.animateSquaresInRow(row)
           clearInterval(intervalId)
           resolve('animateRow completed!')
         }
@@ -126,13 +96,13 @@ class Matrix {
   }
 
   animateAllSquares(squares) {
-    squares.forEach((square) => square.highlight())
-    let state = 1
-    const intervalId = setInterval(() => {
-      squares.forEach((square) => square.flick(state))
-      state++
-    }, 100);
-    this.intervalIds.push(intervalId)
+    // squares.forEach((square) => square.highlight())
+    // let state = 1
+    // const intervalId = setInterval(() => {
+    //   squares.forEach((square) => square.flick(state))
+    //   state++
+    // }, 100);
+    // this.intervalIds.push(intervalId)
   }
 
   // *************************************************

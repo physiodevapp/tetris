@@ -60,7 +60,7 @@ class Game {
 
   initInteractions() {
     document.onfullscreenchange = (ev) => {
-      if(!document.fullscreenElement) {
+      if (!document.fullscreenElement) {
         console.log('exit using esc')
         document.getElementById('start-stop-btn').innerHTML = 'RESUME'
         this.stop()
@@ -123,16 +123,16 @@ class Game {
     this.grid.draw()
   }
 
+  isGameover() {
+    return !this.figure.squares.every((square) => square.y >= 0) &&
+      !this.matrix.canSet(this.figure, 'down')
+  }
+
   play() {
     this.intervalId = setInterval(() => {
       if (this.drop++ >= this.dropVel && !this.isIntervalPaused) {
         this.drop = 0
-        if (this.matrix.isGameover()) {
-          this.end()
-        } else {
-          this.nextFigure()
-          // this.moveFigure()
-        }
+        this.nextFigure()
       }
     }, 1000 / 60)
   }
@@ -162,10 +162,10 @@ class Game {
   }
 
   moveFigure(action = '') {
-    // console.log('moveFigure ', action, ' ', this.isIntervalPaused)
     if (this.isIntervalPaused) {
       return null
     }
+
     if (this.matrix.canSet(this.figure, action)) {
       if (action === 'down') {
         this.score.total++
@@ -178,13 +178,18 @@ class Game {
         this.figure.setTranslation(action)
       }
     }
-    this.render()
 
-    if (this.matrix.isBlocked(this.figure) && !this.matrix.isFreezing && !this.matrix.isChecked) {
+    this.render() // permite dibujar hasta la parte de la figura que quepa, auqneu vaya a terminarse la partida
+
+    if (this.isGameover()) {
+      this.end()
+      return null
+    } 
+
+    if (this.matrix.isBlocked(this.figure) && this.matrix.canFreeze()) {
       this.matrix.isChecked = true
       this.isIntervalPaused = true
       this.matrix.freeze(this.figure).then((linePacks) => {
-        console.log('moveFigure then, ', this.matrix.intervalIds)
         this.score.linesToScore(linePacks)
         this.score.render()
         this.isIntervalPaused = false
@@ -200,12 +205,10 @@ class Game {
   nextFigure() {
     if (!this.matrix.canSet(this.figure, 'down')) {
       this.frozenFigure = this.figure
-      // console.log('addNewFigure')
       this.addNewFigure() // para que no tenga que esperar a completarse el 'freeze()'
-      if (!this.matrix.isFreezing && !this.matrix.isChecked) {
+      if (this.matrix.canFreeze()) {
         this.isIntervalPaused = true
         this.matrix.freeze(this.frozenFigure).then((linePacks) => {
-          // console.log('nextFigure then ', this.matrix.intervalIds)
           this.score.linesToScore(linePacks)
           this.score.render()
           this.isIntervalPaused = false
@@ -213,7 +216,6 @@ class Game {
           this.moveFigure()
         })
       } else {
-        console.log('nextFigure NOT then')
         this.moveFigure()
       }
       this.matrix.isChecked = false
