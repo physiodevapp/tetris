@@ -15,7 +15,7 @@ class Matrix {
   }
 
   canFreeze() {
-    return !this.matrix.isFreezing && !this.matrix.isChecked
+    return !this.isFreezing && !this.isChecked
   }
 
   async freeze(figure) {

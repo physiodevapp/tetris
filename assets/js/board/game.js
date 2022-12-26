@@ -81,7 +81,7 @@ class Game {
           this.stop();
           break;
         case 'RESTART':
-          ev.target.innerHTML = 'RESUME'
+          ev.target.innerHTML = 'PAUSE'
           this.restart();
           break;
       }
@@ -148,6 +148,7 @@ class Game {
   }
 
   restart() {
+    this.clear()
     this.initData()
     this.play()
   }
