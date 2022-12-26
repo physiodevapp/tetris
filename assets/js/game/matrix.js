@@ -33,19 +33,12 @@ class Matrix {
     return new Promise(async (resolve) => {
       const fullRows = this.getFullRows()
       if (fullRows.length) {
-        const linePacks = this.getFullRowPacks()
-        const squares = fullRows
-          .reduce((acc, curr) => {
-            curr.forEach((square) => acc.push(square))
-            return acc
-          }, [])
-
-        await this.animateRows(fullRows, squares).then(async (resp) => {
-          console.log(resp)
+        const animation = new Animation(fullRows)
+        const linePacks = this.getFullRowPacks()        
+        await animation.animateRows().then(async () => {
           setTimeout(async () => {
             await this.deleteFullRows().then(() => {
-              clearInterval(this.intervalId)
-              this.intervalIds.forEach((intervalId) => clearInterval(intervalId))
+              animation.intervalIds.forEach((intervalId) => clearInterval(intervalId))
               resolve(linePacks)
             })
           }, 1000)
@@ -56,57 +49,7 @@ class Matrix {
     })
   }
 
-  // ***********************ANIMATIONS**************************
-
-  animateRows(rows, squares) {
-    return new Promise(async (resolve) => {
-      squares.forEach((square) => square.highlight())
-      for (let i = 0; i < rows.length; i++) {
-        this.animateRow(rows[i]).then((resp) => {
-          this.animateSquaresInRow(rows[i])
-        })
-        if (i === rows.length - 1) {
-          resolve('all animateRow launched!')
-        }
-      }
-    })
-  }
-
-  animateRow(row) {
-    return new Promise((resolve) => {
-      let index = 0
-      const intervalId = setInterval(() => {
-        row[index].hide()
-        index++
-        if (index === COL_DIM) {
-          clearInterval(intervalId)
-          resolve('animateRow completed!')
-        }
-      }, 50)
-    })
-  }
-
-  animateSquaresInRow(row) {
-    let state = 1
-    const intervalId = setInterval(() => {
-      row.forEach((square) => square.flick(state))
-      state++
-    }, 100);
-    this.intervalIds.push(intervalId)
-  }
-
-  animateAllSquares(squares) {
-    // squares.forEach((square) => square.highlight())
-    // let state = 1
-    // const intervalId = setInterval(() => {
-    //   squares.forEach((square) => square.flick(state))
-    //   state++
-    // }, 100);
-    // this.intervalIds.push(intervalId)
-  }
-
-  // *************************************************
-
+  
   deleteFullRows() {
     return new Promise((resolve) => {
       for (let index = 0; index <= this.values.length; index++) {
@@ -158,7 +101,7 @@ class Matrix {
       .every((result) => result === false)
   }
 
-  canSet(figure, action) {
+  canSet(figure, action = null) {
     let testFigure = figure
     if (action === 'rotate') {
       testFigure = figure.clone()
