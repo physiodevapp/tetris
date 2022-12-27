@@ -16,7 +16,6 @@ class Game {
     this.isIntervalPaused = false
 
     this.random = new Random()
-
   }
 
   load() {
@@ -24,6 +23,7 @@ class Game {
     this.initGrid()
     this.initInteractions()
     this.initPanels()
+    this.initBackground()
   }
 
   openFullscreen(elem) {
@@ -40,6 +40,11 @@ class Game {
     if (document.fullscreenElement) {
       document.exitFullscreen()
     }
+  }
+
+  initBackground() {
+    this.background = new Background(document.getElementById('background').getContext('2d'))
+    this.background.load()
   }
 
 
@@ -61,7 +66,6 @@ class Game {
   initInteractions() {
     document.onfullscreenchange = (ev) => {
       if (!document.fullscreenElement) {
-        console.log('exit using esc')
         document.getElementById('start-stop-btn').innerHTML = 'RESUME'
         this.stop()
       }
@@ -83,6 +87,14 @@ class Game {
         case 'RESTART':
           ev.target.innerHTML = 'PAUSE'
           this.restart();
+          break;
+      }
+    }
+
+    document.body.onkeyup = (ev) => {
+      switch (ev.keyCode) {
+        case 32:
+          document.getElementById('start-stop-btn').click() // si lo ejecuto en 'onkeydown' deja de funcionar en cuanto suelto la tecla
           break;
       }
     }
@@ -185,7 +197,7 @@ class Game {
     if (this.isGameover()) {
       this.end()
       return null
-    } 
+    }
 
     if (this.matrix.isBlocked(this.figure) && this.matrix.canFreeze()) {
       this.matrix.isChecked = true
