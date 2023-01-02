@@ -16,14 +16,16 @@ class Game {
     this.isIntervalPaused = false
 
     this.random = new Random()
+
+    this.playState = -1
   }
 
   load() {
+    this.initBackground()
     this.initData()
     this.initGrid()
     this.initInteractions()
     this.initPanels()
-    this.initBackground()
   }
 
   openFullscreen(elem) {
@@ -45,6 +47,7 @@ class Game {
   initBackground() {
     this.background = new Background(document.getElementById('background').getContext('2d'))
     this.background.load()
+    this.background.start()
   }
 
 
@@ -64,37 +67,46 @@ class Game {
   }
 
   initInteractions() {
-    document.onfullscreenchange = (ev) => {
-      if (!document.fullscreenElement) {
-        document.getElementById('start-stop-btn').innerHTML = 'RESUME'
-        this.stop()
+    document.getElementById('start-stop-btn').onclick = () => {
+      if (document.getElementById('board').classList.contains('slide-out-left')) {
+        this.showBoard()
+        setTimeout(() => {
+          this.changePlayState()
+        }, 1350)
+      } else {
+        this.changePlayState()
       }
     }
 
-    document.getElementById('start-stop-btn').onclick = (ev) => {
-      switch (ev.target.innerHTML) {
-        case 'PLAY':
-        case 'RESUME':
-          // this.openFullscreen(this.canvas.parentElement.parentElement)
-          ev.target.innerHTML = 'PAUSE'
-          this.play();
-          break;
-        case 'PAUSE':
-          this.exitFullScreen()
-          ev.target.innerHTML = 'RESUME'
-          this.stop();
-          break;
-        case 'RESTART':
-          ev.target.innerHTML = 'PAUSE'
-          this.restart();
-          break;
+    document.getElementById('menu-btn').onclick = () => {
+      if (document.getElementById('board').classList.contains('slide-out-left')) {
+        document.getElementById('board').classList.add('slide-in-left')
+        document.getElementById('menu').classList.add('slide-out-right')
+
+        document.getElementById('board').classList.remove('slide-out-left')
+        document.getElementById('menu').classList.remove('slide-in-right')
+      } else {
+        if (this.playState === 1) {
+          this.changePlayState()
+        }
+        this.showMenu()
+
       }
+      /*
+      */
     }
 
     document.body.onkeyup = (ev) => {
       switch (ev.keyCode) {
         case 32:
-          document.getElementById('start-stop-btn').click() // si lo ejecuto en 'onkeydown' deja de funcionar en cuanto suelto la tecla
+          if (document.getElementById('board').classList.contains('slide-out-left')) {
+            this.showBoard()
+            setTimeout(() => {
+              this.changePlayState()
+            }, 1350)
+          } else {
+            this.changePlayState()
+          }
           break;
       }
     }
@@ -135,9 +147,42 @@ class Game {
     this.grid.draw()
   }
 
+  showMenu() {
+    document.getElementById('board').classList.add('slide-out-left')
+    document.getElementById('menu').classList.add('slide-in-right')
+
+    document.getElementById('board').classList.remove('slide-in-left')
+    document.getElementById('menu').classList.remove('slide-out-right')
+  }
+
+  showBoard() {
+    document.getElementById('board').classList.add('slide-in-left')
+    document.getElementById('menu').classList.add('slide-out-right')
+
+    document.getElementById('board').classList.remove('slide-out-left')
+    document.getElementById('menu').classList.remove('slide-in-right')
+  }
+
   isGameover() {
     return !this.figure.squares.every((square) => square.y >= 0) &&
       !this.matrix.canSet(this.figure, 'down')
+  }
+
+  changePlayState() {
+    switch (this.playState) {
+      case -2:
+      case -1:
+      case 0:
+        document.getElementById('play-pause-icon').setAttribute('href', '/assets/img/pause-1.png')
+        this.playState === -2 ? this.restart() : this.play();
+        this.playState = 1
+        break;
+      case 1:
+        document.getElementById('play-pause-icon').setAttribute('href', '/assets/img/play-2.png')
+        this.stop();
+        this.playState = 0
+        break;
+    }
   }
 
   play() {
@@ -155,14 +200,20 @@ class Game {
   }
 
   end() {
-    this.stop()
+    /*
     document.getElementById('start-stop-btn').innerHTML = 'RESTART'
+    */
+    this.playState = -2
+    document.getElementById('play-pause-icon').setAttribute('href', '/assets/img/play-2.png')
+    this.stop()
   }
 
   restart() {
     this.clear()
     this.initData()
     this.play()
+    /*
+    */
   }
 
   clear() {

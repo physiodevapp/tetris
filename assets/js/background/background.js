@@ -13,26 +13,24 @@ class Background {
     this.canRender = false
 
     this.image = new Image()
-    this.image.src = "/assets/img/triangles.jpg"
-    this.image.onload = (ev) => {
-      const duplicatesQty = Math.round(this.ctx.canvas.width / this.image.width) + 1
-      this.images = new Array(duplicatesQty).fill(this.image)
-      this.canRender = true
-      this.render()
-    }
-
-    this.initListeners()
+    this.imageScale = 1
   }
 
   load() {
-    this.initListeners()
-    this.start()
+    this.setImage("/assets/img/triangles.jpg")
+    this.setDim() // pensando en que pueda reajustarse con cambios de pantalla... con un 'restart()' por ejemplo...
+    /*
+    */
   }
 
-  initListeners() {
-    window.onresize = (ev) => {
-      console.log('resized!')
-      this.setDim()
+  setImage(src) {
+    this.image.src = src
+    this.image.onload = (ev) => {
+      this.imageScale = this.ctx.canvas.clientHeight / this.image.height
+      const duplicatesQty = Math.round(this.ctx.canvas.width / this.image.width) + 2
+      this.images = new Array(duplicatesQty).fill(this.image)
+      this.canRender = true
+      this.render()
     }
   }
 
@@ -42,7 +40,6 @@ class Background {
   }
 
   start() {
-    this.setDim() // pensando en que pueda reajustarse con cambios de pantalla... con un 'restart()' por ejemplo...
     this.intervalId = setInterval(() => {
       if (this.canRender) {
         this.render()
@@ -66,15 +63,15 @@ class Background {
     this.x += this.vx
     this.ctx.save()
     for (let i = 0; i < this.images.length; i++) {
-      this.ctx.drawImage(this.images[i], 0, 0, this.images[i].width, this.images[i].height, this.x + this.images[i].width * i, 0, this.images[i].width, this.images[i].height)
+      this.ctx.drawImage(this.images[i], 0, 0, this.images[i].width, this.images[i].height, this.x + this.images[i].width * i, 0, this.images[i].width * this.imageScale, this.images[i].height * this.imageScale)
     }
 
-    if (this.x < -this.image.width) {
+    if (this.x <= -this.image.width) {
       this.x = 0
       this.images.push(this.image)
       this.images.shift()
     }
-
+    
     this.ctx.restore()
   }
 

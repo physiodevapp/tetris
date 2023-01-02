@@ -6,6 +6,9 @@ class Matrix {
     this.values = this.create()
 
     this.intervalIds = []
+
+    this.fullRowsSound = new Audio('/assets/audio/mixkit-arcade-bonus-alert-767.wav')
+    this.fullRowsSound.volume = 0.25
   }
 
   create() {
@@ -33,8 +36,9 @@ class Matrix {
     return new Promise(async (resolve) => {
       const fullRows = this.getFullRows()
       if (fullRows.length) {
-        const animation = new Animation(fullRows)
-        const linePacks = this.getFullRowPacks()        
+        // this.fullRowsSound.play()
+        const animation = new Animation(fullRows, this.fullRowsSound)
+        const linePacks = this.getFullRowPacks() 
         await animation.animateRows().then(async () => {
           setTimeout(async () => {
             await this.deleteFullRows().then(() => {
