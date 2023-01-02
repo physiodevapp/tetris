@@ -53,7 +53,7 @@ class Game {
 
   initPanels() {
     const infoPanel = document.getElementById('info-panel')
-    infoPanel.style.height = `${this.canvas.parentElement.offsetHeight}px`
+    infoPanel.style.height = `${this.canvas.parentElement.parentElement.offsetHeight}px`
     infoPanel.style.width = `${this.canvas.clientWidth * 0.5}px`
 
     this.score = new Score()

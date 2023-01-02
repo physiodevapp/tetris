@@ -41,6 +41,7 @@ body {
   border-radius: 18px 0px 0px 18px;
   border: 1px solid white;
   overflow: hidden;
+  padding: 2px;
 }
 
 #board {
@@ -49,7 +50,7 @@ body {
   justify-content: center;
   align-items: center;
   border-radius: 18px 0px 0px 18px;
-  border: 0px solid white;
+  border: 1px solid transparent;
   padding: 1px;
   z-index: 1;
   backdrop-filter: blur(15px);
@@ -62,7 +63,7 @@ body {
   width: 240px;
   height: 480px;
   z-index: 2;
-  border: 0px dashed white;
+  border: 1px solid transparent;
   border-radius: 18px 0px 0px 18px;
   backdrop-filter: blur(15px);
   left: 100%;
@@ -78,7 +79,7 @@ body {
   position: absolute;
   left: 0;
   border: 0px solid white;
-  border-radius: 24px 0px 0px 24px;
+  border-radius: 18px 0px 0px 18px;
 }
 
 #info-panel {
@@ -238,20 +239,20 @@ body {
     transform: scale(1);
     left: 0%;
     opacity: 1;
-    border: 0px solid white;
+    border-color: transparent;
   }
   50% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     opacity: 1;
-    border: 1px solid white;
+    border-color: transparent;
   }
   100% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     left: -80%;
     opacity: 0.5;
-    border: 1px solid white;
+    border-color: transparent;
   }
 }
 @keyframes slide-out-left {
@@ -260,21 +261,21 @@ body {
     transform: scale(1);
     left: 0%;
     opacity: 1;
-    border: 0px solid white;
+    border: 1px solid transparent;
   }
   50% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     left: 0%;
     opacity: 1;
-    border: 1px solid white;
+    border: 1px solid transparent;
   }
   100% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     left: -80%;
     opacity: 0.5;
-    border: 1px solid white;
+    border: 1px solid transparent;
   }
 }
 
@@ -284,21 +285,21 @@ body {
     transform: scale(0.9);
     left: 100%;
     opacity: 0.5;
-    border: 1px solid white;
+    border-color: transparent;
   }
   50% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     left: 0%;
     opacity: 1;
-    border: 1px solid white;
+    border-color: white;
   }
   100% {
     -webkit-transform: scale(1);
     transform: scale(1);
     left: 0%;
     opacity: 1;
-    border: 0px solid white;
+    border-color: transparent;
   }
 }
 
@@ -308,21 +309,21 @@ body {
     transform: scale(0.9);
     left: 100%;
     opacity: 0.5;
-    border: 1px solid white;
+    border-color: transparent;
   }
   50% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     left: 0%;
     opacity: 1;
-    border: 1px solid white;
+    border-color: white;
   }
   100% {
     -webkit-transform: scale(1);
     transform: scale(1);
     left: 0%;
     opacity: 1;
-    border: 0px solid white;
+    border-color: transparent;
   }
 }
 
@@ -343,20 +344,20 @@ body {
     transform: scale(1);
     left: 0%;
     opacity: 1;
-    border: 0px solid white;
+    border-color: transparent;
   }
   50% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     opacity: 1;
-    border: 1px solid white;
+    border-color: white;
   }
   100% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     left: 100%;
     opacity: 0.5;
-    border: 1px solid white;
+    border-color: transparent;
   }
 }
 @keyframes slide-out-right {
@@ -365,21 +366,21 @@ body {
     transform: scale(1);
     left: 0%;
     opacity: 1;    
-    border: 0px solid white;
+    border-color: transparent;
   }
   50% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     left: 0%;
     opacity: 1;    
-    border: 1px solid white;
+    border-color: white;
   }
   100% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     left: 100%;
     opacity: 0.5;
-    border: 1px solid white;
+    border-color: transparent;
   }
 }
 
@@ -389,21 +390,18 @@ body {
     transform: scale(0.9);
     left: -80%;
     opacity: 0.5;
-    border: 1px solid white;
   }
   50% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     left: 0%;
     opacity: 1;
-    border: 1px solid white;
   }
   100% {
     -webkit-transform: scale(1);
     transform: scale(1);
     left: 0%;
     opacity: 1;
-    border: 0px solid white;
   }
 }
 
@@ -413,20 +411,17 @@ body {
     transform: scale(0.9);
     left: -80%;
     opacity: 0.5;
-    border: 1px solid white;
   }
   50% {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
     left: 0%;
     opacity: 1;
-    border: 1px solid white;
   }
   100% {
     -webkit-transform: scale(1);
     transform: scale(1);
     left: 0%;
     opacity: 1;
-    border: 0px solid white;
   }
 }
