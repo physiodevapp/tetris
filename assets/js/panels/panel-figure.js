@@ -8,9 +8,9 @@ class PanelFigure {
     this.setCanvas()
   }
 
-  setCanvas(){
+  setCanvas() {
     const canvas = document.querySelector('#panel-figure')
-    canvas.setAttribute('width', this.container.clientWidth -10)
+    canvas.setAttribute('width', this.container.clientWidth - 10)
     canvas.setAttribute('height', this.container.clientWidth - 10)
     this.ctx = canvas.getContext('2d')
     this.w = this.ctx.canvas.clientWidth / this.colDim

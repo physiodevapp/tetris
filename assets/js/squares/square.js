@@ -48,26 +48,6 @@ class Square {
     this.ctx.restore()
   }
 
-  /*
-  highlightRow() {
-    this.flickRow(0)
-  }
-  
-  flickRow(state) {
-    this.ctx.save()
-    this.ctx.fillStyle = state % 2 ? 'red' : 'white'
-    if (state % 2) {
-      this.ctx.fillStyle = 'white'
-      this.roundRect(this.colToX() + SQUARE_PADDING + GRID_LINE_WIDTH * 0.6, this.rowToY() + SQUARE_PADDING + this.h * 0.25, this.w * COL_DIM - SQUARE_PADDING * 2, this.h - SQUARE_PADDING * 2 - this.h * 0.5, 2);
-      this.ctx.fill();
-    } else {
-      this.ctx.clearRect(this.colToX() + SQUARE_PADDING + GRID_LINE_WIDTH * 0.6, this.rowToY() + SQUARE_PADDING, this.w * COL_DIM - SQUARE_PADDING * 2, this.h - SQUARE_PADDING * 2);
-    }
-    this.ctx.restore()
-  }
-  */
-
-
   setTranslation(action) {
     switch (action) {
       case 'rotate':

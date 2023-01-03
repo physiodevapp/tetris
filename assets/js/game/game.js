@@ -18,6 +18,14 @@ class Game {
     this.random = new Random()
 
     this.playState = -1
+
+    this.audioGameover = new Audio('/assets/audio/mixkit-arcade-retro-game-over-213.wav')
+    this.audioGameover.volume = 0.25
+
+    this.audioStart = new Audio('/assets/audio/mixkit-small-win-2020.wav')
+    this.audioStart.volume = 0.25
+
+    document.getElementById('container-game-over').style.backgroundColor = GAMEOVER_BACKGROUND_COLOR
   }
 
   load() {
@@ -71,52 +79,41 @@ class Game {
       if (document.getElementById('board').classList.contains('slide-out-left')) {
         this.showBoard()
         setTimeout(() => {
-          this.changePlayState()
+          this.togglePlayState()
         }, 1350)
       } else {
-        this.changePlayState()
+        this.togglePlayState()
       }
     }
 
     document.getElementById('menu-btn').onclick = () => {
-      if (document.getElementById('board').classList.contains('slide-out-left')) {
-        document.getElementById('board').classList.add('slide-in-left')
-        document.getElementById('menu').classList.add('slide-out-right')
-
-        document.getElementById('board').classList.remove('slide-out-left')
-        document.getElementById('menu').classList.remove('slide-in-right')
-      } else {
-        if (this.playState === 1) {
-          this.changePlayState()
-        }
-        this.showMenu()
-
-      }
-      /*
-      */
+      this.clickMenuBtn()
     }
 
-    document.body.onkeyup = (ev) => {
+    document.body.onkeyup = (ev) => {  // uso de keyup por tratarse de la tecla espaciadora
       switch (ev.keyCode) {
         case 32:
           if (document.getElementById('board').classList.contains('slide-out-left')) {
             this.showBoard()
             setTimeout(() => {
-              this.changePlayState()
+              this.togglePlayState()
             }, 1350)
           } else {
-            this.changePlayState()
+            this.togglePlayState()
           }
           break;
       }
     }
 
     document.body.onkeydown = (ev) => {
-      if (!this.intervalId) {
+      if (!this.intervalId && ev.keyCode !== 77) {
         return null
       }
       let action = null;
       switch (ev.keyCode) {
+        case 77:
+          this.clickMenuBtn()
+          break;
         case 39:
           action = 'right'
           break;
@@ -147,6 +144,20 @@ class Game {
     this.grid.draw()
   }
 
+  clickMenuBtn() {
+    if (this.playState === -2) {
+      return null
+    }
+    if (document.getElementById('board').classList.contains('slide-out-left')) {
+      this.showBoard()
+    } else {
+      if (this.playState === 1) {
+        this.togglePlayState()
+      }
+      this.showMenu()
+    }
+  }
+
   showMenu() {
     document.getElementById('board').classList.add('slide-out-left')
     document.getElementById('menu').classList.add('slide-in-right')
@@ -168,17 +179,18 @@ class Game {
       !this.matrix.canSet(this.figure, 'down')
   }
 
-  changePlayState() {
+  togglePlayState() {
     switch (this.playState) {
       case -2:
       case -1:
       case 0:
-        document.getElementById('play-pause-icon').setAttribute('href', '/assets/img/pause-1.png')
+        document.getElementById('start-stop-icon').setAttribute('href', '/assets/img/pause-1.png')
         this.playState === -2 ? this.restart() : this.play();
         this.playState = 1
         break;
       case 1:
-        document.getElementById('play-pause-icon').setAttribute('href', '/assets/img/play-2.png')
+        // TODO: alternar filled con outlined dependiendo si pauso en board o en menu
+        document.getElementById('start-stop-icon').setAttribute('href', '/assets/img/play-filled.png')
         this.stop();
         this.playState = 0
         break;
@@ -200,20 +212,28 @@ class Game {
   }
 
   end() {
-    /*
-    document.getElementById('start-stop-btn').innerHTML = 'RESTART'
-    */
     this.playState = -2
-    document.getElementById('play-pause-icon').setAttribute('href', '/assets/img/play-2.png')
+    document.getElementById('start-stop-icon').setAttribute('href', '/assets/img/reset-1.png')
     this.stop()
   }
 
   restart() {
     this.clear()
     this.initData()
+    this.hideGameover()
     this.play()
-    /*
-    */
+  }
+
+  showGameover() {
+    this.audioGameover.play()
+    document.getElementById('container-game-over').classList.add('swirl-in-fwd')
+    document.getElementById('container-game-over').classList.remove('slide-out-blurred-top')
+  }
+
+  hideGameover() {
+    this.audioStart.play()
+    document.getElementById('container-game-over').classList.add('slide-out-blurred-top')
+    document.getElementById('container-game-over').classList.remove('swirl-in-fwd')
   }
 
   clear() {
@@ -246,6 +266,7 @@ class Game {
     this.render() // permite dibujar hasta la parte de la figura que quepa, auqneu vaya a terminarse la partida
 
     if (this.isGameover()) {
+      this.showGameover()
       this.end()
       return null
     }

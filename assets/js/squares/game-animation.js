@@ -1,4 +1,4 @@
-class Animation {
+class Game_Animation {
   constructor(rows, sound) {
     this.rows = rows
 

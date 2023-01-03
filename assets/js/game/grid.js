@@ -15,7 +15,7 @@ class Grid {
     this.ctx.lineWidth = GRID_LINE_WIDTH
 
     for (let x = this.w; x < this.ctx.canvas.clientWidth; x += this.w) {
-      this.ctx.moveTo(x, 0);
+      this.ctx.moveTo(x, 1);
       this.ctx.lineTo(x, this.ctx.canvas.clientHeight);
       this.ctx.stroke();
     }
