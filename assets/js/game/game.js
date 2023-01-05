@@ -19,6 +19,10 @@ class Game {
 
     this.playState = -1
 
+    this.isMenuVisible = false
+
+    this.isControlsAnimationActive = false
+
     this.audioGameover = new Audio('/assets/audio/mixkit-arcade-retro-game-over-213.wav')
     this.audioGameover.volume = 0.25
 
@@ -26,6 +30,7 @@ class Game {
     this.audioStart.volume = 0.25
 
     document.getElementById('container-game-over').style.backgroundColor = GAMEOVER_BACKGROUND_COLOR
+
   }
 
   load() {
@@ -36,21 +41,21 @@ class Game {
     this.initPanels()
   }
 
-  openFullscreen(elem) {
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) { /* Safari */
-      elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE11 */
-      elem.msRequestFullscreen();
-    }
-  }
+  // openFullscreen(elem) {
+  //   if (elem.requestFullscreen) {
+  //     elem.requestFullscreen();
+  //   } else if (elem.webkitRequestFullscreen) { /* Safari */
+  //     elem.webkitRequestFullscreen();
+  //   } else if (elem.msRequestFullscreen) { /* IE11 */
+  //     elem.msRequestFullscreen();
+  //   }
+  // }
 
-  exitFullScreen() {
-    if (document.fullscreenElement) {
-      document.exitFullscreen()
-    }
-  }
+  // exitFullScreen() {
+  //   if (document.fullscreenElement) {
+  //     document.exitFullscreen()
+  //   }
+  // }
 
   initBackground() {
     this.background = new Background(document.getElementById('background').getContext('2d'))
@@ -76,30 +81,29 @@ class Game {
 
   initInteractions() {
     document.getElementById('start-stop-btn').onclick = () => {
-      if (document.getElementById('board').classList.contains('slide-out-left')) {
-        this.showBoard()
-        setTimeout(() => {
-          this.togglePlayState()
-        }, 1350)
-      } else {
-        this.togglePlayState()
+      if (this.isControlsAnimationActive) {
+        return null
       }
+      this.clickStartStopBtn()
     }
 
     document.getElementById('menu-btn').onclick = () => {
+      if (this.isControlsAnimationActive) {
+        return null
+      }
       this.clickMenuBtn()
     }
 
     document.body.onkeyup = (ev) => {  // uso de keyup por tratarse de la tecla espaciadora
       switch (ev.keyCode) {
         case 32:
+          if (this.isControlsAnimationActive) {
+            return null
+          }
           if (document.getElementById('board').classList.contains('slide-out-left')) {
-            this.showBoard()
-            setTimeout(() => {
-              this.togglePlayState()
-            }, 1350)
+            this.clickMenuBtn(true)
           } else {
-            this.togglePlayState()
+            this.clickStartStopBtn()
           }
           break;
       }
@@ -112,6 +116,9 @@ class Game {
       let action = null;
       switch (ev.keyCode) {
         case 77:
+          if (this.isControlsAnimationActive) {
+            return null
+          }
           this.clickMenuBtn()
           break;
         case 39:
@@ -144,34 +151,73 @@ class Game {
     this.grid.draw()
   }
 
-  clickMenuBtn() {
+  clickStartStopBtn() {
+    if (document.getElementById('board').classList.contains('slide-out-left')) {
+      this.showBoard()
+      setTimeout(() => {
+        this.togglePlayState()
+      }, 1350)
+    } else {
+      this.togglePlayState()
+    }
+  }
+
+  clickMenuBtn(resume = false) {
     if (this.playState === -2) {
       return null
     }
     if (document.getElementById('board').classList.contains('slide-out-left')) {
       this.showBoard()
+      this.setIcons()
+      if (resume) {
+        setTimeout(() => {
+          this.clickStartStopBtn()
+        }, 1350);
+      }
     } else {
+      this.showMenu()
       if (this.playState === 1) {
         this.togglePlayState()
+      } else {
+        this.setIcons()
       }
-      this.showMenu()
     }
   }
 
   showMenu() {
+    this.isMenuVisible = true
+    this.isControlsAnimationActive = true
+
     document.getElementById('board').classList.add('slide-out-left')
     document.getElementById('menu').classList.add('slide-in-right')
 
     document.getElementById('board').classList.remove('slide-in-left')
     document.getElementById('menu').classList.remove('slide-out-right')
+
+    document.getElementById('menu-icon').classList.add('rotate-left')
+    document.getElementById('menu-icon').classList.remove('rotate-right')
+
+    setTimeout(() => {
+      this.isControlsAnimationActive = false
+    }, 1350);
   }
 
   showBoard() {
+    this.isMenuVisible = false
+    this.isControlsAnimationActive = true
+
     document.getElementById('board').classList.add('slide-in-left')
     document.getElementById('menu').classList.add('slide-out-right')
 
     document.getElementById('board').classList.remove('slide-out-left')
     document.getElementById('menu').classList.remove('slide-in-right')
+
+    document.getElementById('menu-icon').classList.add('rotate-right')
+    document.getElementById('menu-icon').classList.remove('rotate-left')
+
+    setTimeout(() => {
+      this.isControlsAnimationActive = false
+    }, 1350);
   }
 
   isGameover() {
@@ -179,22 +225,61 @@ class Game {
       !this.matrix.canSet(this.figure, 'down')
   }
 
+  showGameover() {
+    this.audioGameover.play()
+    document.getElementById('container-game-over').classList.add('swirl-in-fwd')
+    document.getElementById('container-game-over').classList.remove('slide-out-blurred-top')
+  }
+
+  hideGameover() {
+    this.audioStart.play()
+    document.getElementById('container-game-over').classList.add('slide-out-blurred-top')
+    document.getElementById('container-game-over').classList.remove('swirl-in-fwd')
+  }
+
   togglePlayState() {
     switch (this.playState) {
       case -2:
       case -1:
       case 0:
-        document.getElementById('start-stop-icon').setAttribute('href', '/assets/img/pause-1.png')
         this.playState === -2 ? this.restart() : this.play();
         this.playState = 1
         break;
       case 1:
-        // TODO: alternar filled con outlined dependiendo si pauso en board o en menu
-        document.getElementById('start-stop-icon').setAttribute('href', '/assets/img/play-filled.png')
         this.stop();
         this.playState = 0
         break;
     }
+    this.setIcons()
+  }
+
+  setIcons() {
+    this.setStartStopIcon()
+    this.setMenuIcon()
+  }
+
+  setStartStopIcon() {
+    switch (this.playState) {
+      case 1:
+        document.getElementById('start-stop-icon').setAttribute('href', '/assets/img/pause-1.png')
+        break;
+      default:
+        const timeout = (document.getElementById('menu-icon').classList.contains('rotate-right') &&
+          document.getElementById('menu-icon').getAttribute('outlined')) === 'true' || document.getElementById('start-stop-icon').getAttribute('outlined') === 'false' ? 0 : 1350
+        setTimeout(() => {
+          document.getElementById('start-stop-icon').setAttribute('outlined', this.isMenuVisible)
+          document.getElementById('start-stop-icon').setAttribute('href', `/assets/img/${this.isMenuVisible ? 'play-outlined' : 'play-filled'}.png`)
+        }, timeout);
+    }
+  }
+
+  setMenuIcon() {
+    const timeout = document.getElementById('menu-icon').classList.contains('rotate-right') &&
+      this.playState !== 1 ? 1350 : 0
+    setTimeout(() => {
+      document.getElementById('menu-icon').setAttribute('outlined', !this.isMenuVisible)
+      document.getElementById('menu-icon').setAttribute('href', `/assets/img/${this.isMenuVisible ? 'gear-filled' : 'gear-outlined'}.png`)
+    }, timeout)
   }
 
   play() {
@@ -222,18 +307,6 @@ class Game {
     this.initData()
     this.hideGameover()
     this.play()
-  }
-
-  showGameover() {
-    this.audioGameover.play()
-    document.getElementById('container-game-over').classList.add('swirl-in-fwd')
-    document.getElementById('container-game-over').classList.remove('slide-out-blurred-top')
-  }
-
-  hideGameover() {
-    this.audioStart.play()
-    document.getElementById('container-game-over').classList.add('slide-out-blurred-top')
-    document.getElementById('container-game-over').classList.remove('swirl-in-fwd')
   }
 
   clear() {
