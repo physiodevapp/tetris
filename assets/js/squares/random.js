@@ -1,10 +1,11 @@
 class Random {
     constructor() {
       this.figure = null
-      this.color = null
     }
   
-    getFigure(ctx, colDim, rowDim, isPanel = false, letters = [73, 74, 76, 79, 83, 84, 90], color) {
+    getFigure(ctx, colDim, rowDim, isPanel = false, letters = LETTERS, color) {
+      letters = letters.length === 0 ? LETTERS : letters
+      console.log('getFigure allow letters...', letters)
       if (!color) {
         color = this.getColor()
       }
@@ -33,6 +34,12 @@ class Random {
           break;
       }
       return this.figure
+
+      prevFigures.push(this.figure)
+      return {
+        'newFigure': this.figure,
+        'prevFigures': prevFigures
+      }
     }
   
     getColor() {

@@ -12,3 +12,5 @@ const SQUARE_PADDING = 2
 const PALETTE_COLORS = ['#d93919','#ff7f00','#eae6a7','#f8d807','#adc35e','#787500','#15738f']
 
 const GAMEOVER_BACKGROUND_COLOR = `rgba(${COLOR_1} / 85%)`
+
+LETTERS = [73, 74, 76, 79, 83, 84, 90]

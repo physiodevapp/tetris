@@ -11,6 +11,7 @@ class Game {
     this.dropVel = 60
     this.drop = 0
 
+    this.prevFigures = []
     this.newFigures = []
 
     this.isIntervalPaused = false
@@ -30,6 +31,8 @@ class Game {
     this.audioStart.volume = 0.25
 
     document.getElementById('container-game-over').style.backgroundColor = GAMEOVER_BACKGROUND_COLOR
+
+    this.menuBtnAnimationDuration = 1350
 
   }
 
@@ -63,6 +66,12 @@ class Game {
     this.background.start()
   }
 
+  initData() {
+    this.isFirstFigure = true
+    this.allowLetters = LETTERS
+    this.matrix = new Matrix(this.colDim, this.rowDim)
+    this.addNewFigure()
+  }
 
   initPanels() {
     const infoPanel = document.getElementById('info-panel')
@@ -73,9 +82,10 @@ class Game {
     this.score.render()
 
     this.panelFigure = new PanelFigure()
+    console.log('initPanels ', this.newFigures)
     this.panelFigure.render(
-      this.newFigures[this.newFigures.length - 1].type,
-      this.newFigures[this.newFigures.length - 1].color
+      this.newFigures[0].type,
+      this.newFigures[0].color
     )
   }
 
@@ -141,11 +151,6 @@ class Game {
     }
   }
 
-  initData() {
-    this.matrix = new Matrix(this.colDim, this.rowDim)
-    this.addNewFigure()
-  }
-
   initGrid() {
     this.grid = new Grid(canvas.parentElement.firstElementChild.getContext('2d'), this.colDim, this.rowDim)
     this.grid.draw()
@@ -156,7 +161,7 @@ class Game {
       this.showBoard()
       setTimeout(() => {
         this.togglePlayState()
-      }, 1350)
+      }, this.menuBtnAnimationDuration)
     } else {
       this.togglePlayState()
     }
@@ -172,7 +177,7 @@ class Game {
       if (resume) {
         setTimeout(() => {
           this.clickStartStopBtn()
-        }, 1350);
+        }, this.menuBtnAnimationDuration);
       }
     } else {
       this.showMenu()
@@ -199,7 +204,7 @@ class Game {
 
     setTimeout(() => {
       this.isControlsAnimationActive = false
-    }, 1350);
+    }, this.menuBtnAnimationDuration);
   }
 
   showBoard() {
@@ -217,7 +222,7 @@ class Game {
 
     setTimeout(() => {
       this.isControlsAnimationActive = false
-    }, 1350);
+    }, this.menuBtnAnimationDuration);
   }
 
   isGameover() {
@@ -265,7 +270,7 @@ class Game {
         break;
       default:
         const timeout = (document.getElementById('menu-icon').classList.contains('rotate-right') &&
-          document.getElementById('menu-icon').getAttribute('outlined')) === 'true' || document.getElementById('start-stop-icon').getAttribute('outlined') === 'false' ? 0 : 1350
+          document.getElementById('menu-icon').getAttribute('outlined')) === 'true' || document.getElementById('start-stop-icon').getAttribute('outlined') === 'false' ? 0 : this.menuBtnAnimationDuration
         setTimeout(() => {
           document.getElementById('start-stop-icon').setAttribute('outlined', this.isMenuVisible)
           document.getElementById('start-stop-icon').setAttribute('href', `/assets/img/${this.isMenuVisible ? 'play-outlined' : 'play-filled'}.png`)
@@ -275,7 +280,7 @@ class Game {
 
   setMenuIcon() {
     const timeout = document.getElementById('menu-icon').classList.contains('rotate-right') &&
-      this.playState !== 1 ? 1350 : 0
+      this.playState !== 1 ? this.menuBtnAnimationDuration : 0
     setTimeout(() => {
       document.getElementById('menu-icon').setAttribute('outlined', !this.isMenuVisible)
       document.getElementById('menu-icon').setAttribute('href', `/assets/img/${this.isMenuVisible ? 'gear-filled' : 'gear-outlined'}.png`)
@@ -297,6 +302,7 @@ class Game {
   }
 
   end() {
+    this.showGameover()
     this.playState = -2
     document.getElementById('start-stop-icon').setAttribute('href', '/assets/img/reset-1.png')
     this.stop()
@@ -334,12 +340,22 @@ class Game {
       } else {
         this.figure.setTranslation(action)
       }
+
+      if (this.isFirstFigure) {
+        this.isFirstFigure = false
+        if (this.panelFigure) {
+          this.panelFigure.render(
+            this.newFigures[this.newFigures.length - 1].type,
+            this.newFigures[this.newFigures.length - 1].color
+          )
+        }
+      }
     }
 
+    console.log('render')
     this.render() // permite dibujar hasta la parte de la figura que quepa, auqneu vaya a terminarse la partida
 
     if (this.isGameover()) {
-      this.showGameover()
       this.end()
       return null
     }
@@ -383,11 +399,48 @@ class Game {
   }
 
   addNewFigure() {
+    console.log('addNewFigure init', this.allowLetters)
+
+    // this.allowLetters = this.allowLetters.length === 0 ? LETTERS : this.allowLetters
+    
     while (this.newFigures.length < 2) {
-      this.newFigures.push(this.random.getFigure(this.ctx, this.colDim, this.rowDim))
+      this.allowLetters = this.allowLetters
+        .filter((type) => {
+          return this.newFigures.map((figure) => figure.type).indexOf(type) === -1
+        })
+
+      this.newFigures.push(this.random.getFigure(this.ctx, this.colDim, this.rowDim, false, this.allowLetters))
     }
-    this.figure = this.newFigures[0]
-    this.newFigures.shift()
+    this.allowLetters = this.allowLetters
+      .filter((type) => {
+        return this.newFigures.map((figure) => figure.type).indexOf(type) === -1
+      })
+
+    // OPCION A
+    // if (this.panelFigure) {
+    //   this.figure = this.newFigures.shift()
+    //   this.prevFigures.push(this.figure)
+    // } else {
+    //   this.figure = this.newFigures[0]
+    //   this.newFigures.forEach((newFigure) => this.prevFigures.push(newFigure))
+    // }
+    // OPCION B
+    if (this.isFirstFigure) {
+      this.figure = this.newFigures[0]
+      this.newFigures.forEach((newFigure) => this.prevFigures.push(newFigure))
+    } else {
+      this.figure = this.newFigures.shift()
+      this.prevFigures.push(this.figure)
+    }
+
+
+    console.log('addNewFigure type ', this.figure.type)
+    console.log('addNewFigure after', this.allowLetters)
+
+    if (this.allowLetters.length === 0) {
+      this.allowLetters = LETTERS
+      this.isFirstFigure = true
+    }
 
     if (this.panelFigure) {
       this.panelFigure.render(
