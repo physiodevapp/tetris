@@ -7,7 +7,7 @@ class Matrix {
 
     this.intervalIds = []
 
-    this.audioFullRows = new Audio('/assets/audio/mixkit-arcade-bonus-alert-767.wav')
+    this.audioFullRows = new Audio('./assets/audio/mixkit-arcade-bonus-alert-767.wav')
     this.audioFullRows.volume = 0.25
   }
 

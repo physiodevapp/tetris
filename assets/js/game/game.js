@@ -24,10 +24,10 @@ class Game {
 
     this.isControlsAnimationActive = false
 
-    this.audioGameover = new Audio('/assets/audio/mixkit-arcade-retro-game-over-213.wav')
+    this.audioGameover = new Audio('./assets/audio/mixkit-arcade-retro-game-over-213.wav')
     this.audioGameover.volume = 0.25
 
-    this.audioStart = new Audio('/assets/audio/mixkit-small-win-2020.wav')
+    this.audioStart = new Audio('./assets/audio/mixkit-small-win-2020.wav')
     this.audioStart.volume = 0.25
 
     document.getElementById('container-game-over').style.backgroundColor = GAMEOVER_BACKGROUND_COLOR
@@ -263,7 +263,7 @@ class Game {
   setStartStopIcon() {
     switch (this.playState) {
       case 1:
-        document.getElementById('start-stop-icon').setAttribute('href', '/assets/img/pause-1.png')
+        document.getElementById('start-stop-icon').setAttribute('href', './assets/img/pause-1.png')
         break;
       default:
         const timeout = (document.getElementById('menu-icon').classList.contains('rotate-right') &&
@@ -301,7 +301,7 @@ class Game {
   end() {
     this.showGameover()
     this.playState = -2
-    document.getElementById('start-stop-icon').setAttribute('href', '/assets/img/reset-1.png')
+    document.getElementById('start-stop-icon').setAttribute('href', './assets/img/reset-1.png')
     this.stop()
   }
 
