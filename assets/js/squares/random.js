@@ -5,7 +5,7 @@ class Random {
   
     getFigure(ctx, colDim, rowDim, isPanel = false, letters = LETTERS, color) {
       letters = letters.length === 0 ? LETTERS : letters
-      console.log('getFigure allow letters...', letters)
+      // console.log('getFigure allow letters...', letters)
       if (!color) {
         color = this.getColor()
       }

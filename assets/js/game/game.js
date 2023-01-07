@@ -38,10 +38,11 @@ class Game {
 
   load() {
     this.initBackground()
+    this.initPanels()
     this.initData()
     this.initGrid()
     this.initInteractions()
-    this.initPanels()
+    // this.initPanels()
   }
 
   // openFullscreen(elem) {
@@ -82,11 +83,6 @@ class Game {
     this.score.render()
 
     this.panelFigure = new PanelFigure()
-    console.log('initPanels ', this.newFigures)
-    this.panelFigure.render(
-      this.newFigures[0].type,
-      this.newFigures[0].color
-    )
   }
 
   initInteractions() {
@@ -192,6 +188,7 @@ class Game {
   showMenu() {
     this.isMenuVisible = true
     this.isControlsAnimationActive = true
+    document.getElementById('menu').scrollTop = 0;
 
     document.getElementById('board').classList.add('slide-out-left')
     document.getElementById('menu').classList.add('slide-in-right')
@@ -343,16 +340,14 @@ class Game {
 
       if (this.isFirstFigure) {
         this.isFirstFigure = false
-        if (this.panelFigure) {
-          this.panelFigure.render(
-            this.newFigures[this.newFigures.length - 1].type,
-            this.newFigures[this.newFigures.length - 1].color
-          )
-        }
+        this.panelFigure.render(
+          this.newFigures[this.newFigures.length - 1].type,
+          this.newFigures[this.newFigures.length - 1].color
+        )
+        this.newFigures.shift()
       }
     }
 
-    console.log('render')
     this.render() // permite dibujar hasta la parte de la figura que quepa, auqneu vaya a terminarse la partida
 
     if (this.isGameover()) {
@@ -399,32 +394,15 @@ class Game {
   }
 
   addNewFigure() {
-    console.log('addNewFigure init', this.allowLetters)
-
-    // this.allowLetters = this.allowLetters.length === 0 ? LETTERS : this.allowLetters
-    
     while (this.newFigures.length < 2) {
-      this.allowLetters = this.allowLetters
-        .filter((type) => {
-          return this.newFigures.map((figure) => figure.type).indexOf(type) === -1
-        })
-
       this.newFigures.push(this.random.getFigure(this.ctx, this.colDim, this.rowDim, false, this.allowLetters))
     }
-    this.allowLetters = this.allowLetters
+
+    this.allowLetters = LETTERS
       .filter((type) => {
         return this.newFigures.map((figure) => figure.type).indexOf(type) === -1
       })
 
-    // OPCION A
-    // if (this.panelFigure) {
-    //   this.figure = this.newFigures.shift()
-    //   this.prevFigures.push(this.figure)
-    // } else {
-    //   this.figure = this.newFigures[0]
-    //   this.newFigures.forEach((newFigure) => this.prevFigures.push(newFigure))
-    // }
-    // OPCION B
     if (this.isFirstFigure) {
       this.figure = this.newFigures[0]
       this.newFigures.forEach((newFigure) => this.prevFigures.push(newFigure))
@@ -433,21 +411,18 @@ class Game {
       this.prevFigures.push(this.figure)
     }
 
-
-    console.log('addNewFigure type ', this.figure.type)
-    console.log('addNewFigure after', this.allowLetters)
-
-    if (this.allowLetters.length === 0) {
-      this.allowLetters = LETTERS
-      this.isFirstFigure = true
-    }
-
-    if (this.panelFigure) {
+    if (this.isFirstFigure) {
+      this.panelFigure.render(
+        this.newFigures[0].type,
+        this.newFigures[0].color
+      )
+    } else {
       this.panelFigure.render(
         this.newFigures[this.newFigures.length - 1].type,
         this.newFigures[this.newFigures.length - 1].color
       )
     }
+
   }
 
 }

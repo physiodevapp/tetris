@@ -36,12 +36,12 @@ class Matrix {
     return new Promise(async (resolve) => {
       const fullRows = this.getFullRows()
       if (fullRows.length) {
-        const animation = new Game_Animation(fullRows, this.audioFullRows)
+        const rowsAnimation = new Rows_Animation(fullRows, this.audioFullRows)
         const linePacks = this.getFullRowPacks() 
-        await animation.animateRows().then(async () => {
+        await rowsAnimation.animateRows().then(async () => {
           setTimeout(async () => {
             await this.deleteFullRows().then(() => {
-              animation.intervalIds.forEach((intervalId) => clearInterval(intervalId))
+              rowsAnimation.intervalIds.forEach((intervalId) => clearInterval(intervalId))
               resolve(linePacks)
             })
           }, 1000)

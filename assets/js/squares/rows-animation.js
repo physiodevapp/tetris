@@ -1,4 +1,4 @@
-class Game_Animation {
+class Rows_Animation {
   constructor(rows, sound) {
     this.rows = rows
 
@@ -55,17 +55,5 @@ class Game_Animation {
     }, 100);
     this.intervalIds.push(intervalId)
   }
-
-  /*
-  animateAllSquares() {
-    this.squares.forEach((square) => square.highlight())
-    let state = 1
-    const intervalId = setInterval(() => {
-      this.squares.forEach((square) => square.flick(state))
-      state++
-    }, 100);
-    this.intervalIds.push(intervalId)
-  }
-  */
 
 }

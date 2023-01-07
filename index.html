@@ -11,9 +11,6 @@
 
 <body>
   <div id="container">
-    <!-- <div id="container-game-over">
-      <img src="/assets/img/game-over-256.png" alt="game-over-icon">
-    </div> -->
     <canvas id="background" width="0" height="0"></canvas>
     <div id="container-board-menu">
       <div id="container-game-over">
@@ -24,6 +21,18 @@
         <canvas id="game" width="240" height="480"></canvas>
       </div>
       <div id="menu">
+        <div class="title">Comandos</div>
+        <img src="/assets/img/figure-example.png" alt="" srcset="">
+        <p class="description">
+          Utiliza las teclas <img src="/assets/img/arrow-left-64.png" alt="arrow-left-icon"><img src="/assets/img/arrow-right-64.png" alt="arrow-right-icon"> para desplazar la figura a derecha e izquierda
+        </p>
+        <img src="/assets/img/figure-example-fade.png" alt="" srcset="">
+        <p class="description">
+          Utiliza la tecla <img src="/assets/img/arrow-down-64.png" alt="arrow-down-icon"> para acelerar el desplazamiento de la figura hacia abajo
+        </p>
+        <p class="description">
+          Puedes presionar la tecla <img src="/assets/img/keyboard-key-m-64.png" alt="key-m-icon"> para abrir el menu o volver al juego
+        </p>
       </div>
     </div>
     <div id="info-panel">
@@ -85,7 +94,7 @@
   <script src="./assets/js/squares/figures/o-figure.js"></script>
   <script src="./assets/js/squares/figures/i-figure.js"></script>
   <script src="./assets/js/squares/random.js"></script>
-  <script src="./assets/js/squares/game-animation.js"></script>
+  <script src="./assets/js/squares/rows-animation.js"></script>
   <script src="./assets/js/panels/panel-figure.js"></script>
   <script src="./assets/js/panels/score.js"></script>
   <script src="./assets/js/game/matrix.js"></script>

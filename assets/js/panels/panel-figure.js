@@ -24,7 +24,7 @@ class PanelFigure {
   }
 
   createFigure(type, color) {
-    console.log('createFigure')
+    // console.log('createFigure')
     this.figure = new Random().getFigure(this.ctx, this.colDim, this.rowDim, true, [type], color)
   }
 
