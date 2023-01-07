@@ -17,7 +17,7 @@ class Background {
   }
 
   load() {
-    this.setImage("/assets/img/triangles.jpg")
+    this.setImage("./assets/img/triangles.jpg")
     this.setDim() // pensando en que pueda reajustarse con cambios de pantalla... con un 'restart()' por ejemplo...
     /*
     */
