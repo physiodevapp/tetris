@@ -263,7 +263,7 @@ class Game {
   setStartStopIcon() {
     switch (this.playState) {
       case 1:
-        document.getElementById('start-stop-icon').setAttribute('href', './assets/img/pause-1.png')
+        document.getElementById('start-stop-icon').setAttribute('href', './assets/img/pause.png')
         break;
       default:
         const timeout = (document.getElementById('menu-icon').classList.contains('rotate-right') &&
@@ -301,7 +301,7 @@ class Game {
   end() {
     this.showGameover()
     this.playState = -2
-    document.getElementById('start-stop-icon').setAttribute('href', './assets/img/reset-1.png')
+    document.getElementById('start-stop-icon').setAttribute('href', './assets/img/reset.png')
     this.stop()
   }
 
