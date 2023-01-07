@@ -270,7 +270,7 @@ class Game {
           document.getElementById('menu-icon').getAttribute('outlined')) === 'true' || document.getElementById('start-stop-icon').getAttribute('outlined') === 'false' ? 0 : this.menuBtnAnimationDuration
         setTimeout(() => {
           document.getElementById('start-stop-icon').setAttribute('outlined', this.isMenuVisible)
-          document.getElementById('start-stop-icon').setAttribute('href', `/assets/img/${this.isMenuVisible ? 'play-outlined' : 'play-filled'}.png`)
+          document.getElementById('start-stop-icon').setAttribute('href', `./assets/img/${this.isMenuVisible ? 'play-outlined' : 'play-filled'}.png`)
         }, timeout);
     }
   }
@@ -280,7 +280,7 @@ class Game {
       this.playState !== 1 ? this.menuBtnAnimationDuration : 0
     setTimeout(() => {
       document.getElementById('menu-icon').setAttribute('outlined', !this.isMenuVisible)
-      document.getElementById('menu-icon').setAttribute('href', `/assets/img/${this.isMenuVisible ? 'gear-filled' : 'gear-outlined'}.png`)
+      document.getElementById('menu-icon').setAttribute('href', `./assets/img/${this.isMenuVisible ? 'gear-filled' : 'gear-outlined'}.png`)
     }, timeout)
   }
 
