@@ -12,6 +12,11 @@ document.onfullscreenchange = (ev) => {
 
 window.onresize = (ev) => {
   console.log('resized!')
-  // TODO: revisar que funcione bien añadiendo solo una imagen y no dos al array 'this.images' cuando cambia el ancho de la pantalla
   game.background.load()
 }
+
+window.addEventListener('keydown', function(e) {  // prevents scrolling down when pressing space bar
+  if(e.keyCode == 32 && e.target == document.body) {
+    e.preventDefault();
+  }
+});

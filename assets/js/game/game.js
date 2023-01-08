@@ -114,7 +114,6 @@ class Game {
     document.body.onkeyup = (ev) => {  // uso de keyup por tratarse de la tecla espaciadora
       switch (ev.keyCode) {
         case 32:
-          ev.preventDefault(); //prevents scroll down when pressed
           if (this.isControlsAnimationActive) {
             return null
           }
