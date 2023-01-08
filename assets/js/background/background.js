@@ -17,7 +17,7 @@ class Background {
   }
 
   load() {
-    this.setImage("./assets/img/background.jpg")
+    this.setImage(BACKGROUND_IMAGE)
     this.setDim() // pensando en que pueda reajustarse con cambios de pantalla... con un 'restart()' por ejemplo...
     /*
     */

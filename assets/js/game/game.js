@@ -24,10 +24,10 @@ class Game {
 
     this.isControlsAnimationActive = false
 
-    this.audioGameover = new Audio('./assets/audio/mixkit-arcade-retro-game-over-213.wav')
+    this.audioGameover = new Audio(AUDIO_GAMEOVER)
     this.audioGameover.volume = 0.25
 
-    this.audioStart = new Audio('./assets/audio/mixkit-small-win-2020.wav')
+    this.audioStart = new Audio(AUDIO_GAME_START)
     this.audioStart.volume = 0.25
 
     document.getElementById('container-game-over').style.backgroundColor = GAMEOVER_BACKGROUND_COLOR
@@ -86,6 +86,17 @@ class Game {
   }
 
   initInteractions() {
+    document.getElementById('start-first-time-btn').onclick = () => {
+      if (this.isControlsAnimationActive) {
+        return null
+      }
+      this.audioStart.play()
+      document.getElementById('container-start-first-time').classList.add('slide-out-blurred-top')
+      document.getElementById('controls-container').classList.add('controls-container-unblur')
+
+      this.clickStartStopBtn()
+    }
+
     document.getElementById('start-stop-btn').onclick = () => {
       if (this.isControlsAnimationActive) {
         return null
@@ -103,6 +114,7 @@ class Game {
     document.body.onkeyup = (ev) => {  // uso de keyup por tratarse de la tecla espaciadora
       switch (ev.keyCode) {
         case 32:
+          ev.preventDefault(); //prevents scroll down when pressed
           if (this.isControlsAnimationActive) {
             return null
           }
@@ -116,11 +128,23 @@ class Game {
     }
 
     document.body.onkeydown = (ev) => {
-      if (!this.intervalId && ev.keyCode !== 77) {
+      if (!this.intervalId && ev.keyCode !== 77 && ev.keyCode !== 82) {
         return null
       }
       let action = null;
       switch (ev.keyCode) {
+        case 82:
+          // console.log('R key pressed! ', this.playState)
+          if (this.isMenuVisible) {
+            if (this.isControlsAnimationActive) {
+              return null
+            }
+            this.clickMenuBtn()
+            this.reset(this.menuBtnAnimationDuration)
+          } else {
+            this.reset()
+          }
+          break;
         case 77:
           if (this.isControlsAnimationActive) {
             return null
@@ -153,6 +177,10 @@ class Game {
   }
 
   clickStartStopBtn() {
+    if (!document.getElementById("controls-container").classList.contains('controls-container-unblur') ||
+      this.isIntervalPaused) {
+      return null
+    }
     if (document.getElementById('board').classList.contains('slide-out-left')) {
       this.showBoard()
       setTimeout(() => {
@@ -164,7 +192,9 @@ class Game {
   }
 
   clickMenuBtn(resume = false) {
-    if (this.playState === -2) {
+    if (this.playState === -2 ||
+      !document.getElementById("controls-container").classList.contains('controls-container-unblur') ||
+      this - this.isIntervalPaused) {
       return null
     }
     if (document.getElementById('board').classList.contains('slide-out-left')) {
@@ -231,12 +261,18 @@ class Game {
     this.audioGameover.play()
     document.getElementById('container-game-over').classList.add('swirl-in-fwd')
     document.getElementById('container-game-over').classList.remove('slide-out-blurred-top')
+
+    document.getElementById('background').classList.add('background-gameover')
+    document.getElementById('background').classList.remove('background-gameover-revert')
   }
 
   hideGameover() {
     this.audioStart.play()
     document.getElementById('container-game-over').classList.add('slide-out-blurred-top')
     document.getElementById('container-game-over').classList.remove('swirl-in-fwd')
+
+    document.getElementById('background').classList.add('background-gameover-revert')
+    document.getElementById('background').classList.remove('background-gameover')
   }
 
   togglePlayState() {
@@ -267,7 +303,8 @@ class Game {
         break;
       default:
         const timeout = (document.getElementById('menu-icon').classList.contains('rotate-right') &&
-          document.getElementById('menu-icon').getAttribute('outlined')) === 'true' || document.getElementById('start-stop-icon').getAttribute('outlined') === 'false' ? 0 : this.menuBtnAnimationDuration
+          document.getElementById('menu-icon').getAttribute('outlined')) === 'true' ||
+          document.getElementById('start-stop-icon').getAttribute('outlined') === 'false' ? 0 : this.menuBtnAnimationDuration
         setTimeout(() => {
           document.getElementById('start-stop-icon').setAttribute('outlined', this.isMenuVisible)
           document.getElementById('start-stop-icon').setAttribute('href', `./assets/img/${this.isMenuVisible ? 'play-outlined' : 'play-filled'}.png`)
@@ -299,17 +336,39 @@ class Game {
   }
 
   end() {
-    this.showGameover()
-    this.playState = -2
     document.getElementById('start-stop-icon').setAttribute('href', './assets/img/reset.png')
+    this.playState = -2
     this.stop()
   }
 
   restart() {
     this.clear()
     this.initData()
-    this.hideGameover()
+    if (document.getElementById('container-game-over').classList.contains('swirl-in-fwd')) {
+      this.hideGameover()
+    }
     this.play()
+  }
+
+  reset(timeout = 0) {
+    if (this.playState === -2 ||
+      !document.getElementById("controls-container").classList.contains('controls-container-unblur')) {
+      return null
+    }
+    this.stop()
+    this.clear()
+    this.newFigures = []
+    this.initData()
+    setTimeout(() => {
+      switch (this.playState) {
+        case 1:
+          this.play()
+          break;
+        case 0:
+          this.clickStartStopBtn()
+          break;
+      }
+    }, timeout);
   }
 
   clear() {
@@ -351,6 +410,7 @@ class Game {
     this.render() // permite dibujar hasta la parte de la figura que quepa, auqneu vaya a terminarse la partida
 
     if (this.isGameover()) {
+      this.showGameover()
       this.end()
       return null
     }

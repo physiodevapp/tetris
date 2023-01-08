@@ -23,6 +23,61 @@ body {
   height: 400px;
   position: absolute;
   left: 0;
+  filter: grayscale(0) saturate(0.5)
+}
+
+.background-gameover {
+  -webkit-animation: background-gameover 0.7s ease-in-out both;
+  animation: background-gameover 0.7s ease-in-out both;
+}
+
+@-webkit-keyframes background-gameover {
+  0% {
+    filter: grayscale(0) saturate(0.5);
+  }
+
+  100% {
+    filter: grayscale(1) saturate(0.5)
+  }
+}
+
+@keyframes background-gameover {
+  0% {
+    filter: grayscale(0) saturate(0.5);
+  }
+
+  100% {
+    filter: grayscale(1) saturate(0.5)
+  }
+}
+
+.background-gameover-revert {
+  -webkit-animation: background-gameover-revert 0.7s ease-in-out both;
+  animation: background-gameover-revert 0.7s ease-in-out both;
+}
+
+@-webkit-keyframes background-gameover-revert {
+  0% {
+    -webkit-filter: grayscale(1) saturate(0.5);
+    filter: grayscale(1) saturate(0.5);
+  }
+
+  100% {
+    -webkit-filter: grayscale(0) saturate(0.5);
+    filter: grayscale(0) saturate(0.5);
+  }
+}
+
+@keyframes background-gameover-revert {
+  0% {
+    -webkit-filter: grayscale(1) saturate(0.5);
+    filter: grayscale(1) saturate(0.5);
+  }
+
+  100% {
+    -webkit-filter: grayscale(0) saturate(0.5);
+    filter: grayscale(0) saturate(0.5);
+  }
 }
 
 #main-panel {
@@ -83,6 +138,12 @@ body {
   font-size: 20px;
   text-align: center;
   font-weight: bold;
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
 }
 
 #menu .description {
@@ -93,9 +154,15 @@ body {
   font-style: oblique;
   font-size: 1em;
   line-height: 1.8em;
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
 }
 
-.description > img {
+.description>img {
   height: 1.5em;
   vertical-align: middle;
 }
@@ -108,7 +175,7 @@ body {
 }
 
 #grid {
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: rgba(0, 0, 0, 60%);
   border-radius: 18px 0px 0px 18px;
 }
 
@@ -179,7 +246,7 @@ body {
   height: 60%;
   width: 80%;
   border-radius: 50px;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 60%);
 }
 
 #score-panel>div {
@@ -197,6 +264,38 @@ body {
   font-family: cursive;
   border-radius: 20px 4px;
   margin-top: 40px;
+  filter: blur(25px);
+  opacity: 0;
+}
+
+.controls-container-unblur {
+  opacity: 1 !important;
+  -webkit-animation: controls-container-unblur 0.45s ease-in-out both;;
+  animation: controls-container-unblur 0.45s ease-in-out both;;
+}
+
+@-webkit-keyframes controls-container-unblur {
+  0% {
+    -webkit-filter: blur(25px);
+    filter: blur(25px);
+  }
+
+  100% {
+    -webkit-filter: blur(0px);
+    filter: blur(0px);
+  }
+}
+
+@keyframes controls-container-unblur {
+  0% {
+    -webkit-filter: blur(25px);
+    filter: blur(25px);
+  }
+
+  100% {
+    -webkit-filter: blur(0px);
+    filter: blur(0px);
+  }
 }
 
 .svg-container {
@@ -504,7 +603,7 @@ body {
 
 #container-game-over {
   position: absolute;
-  display: flex;
+  display: none;
   align-items: center;
   opacity: 0;
   height: 200px;
@@ -525,6 +624,7 @@ body {
 }
 
 .swirl-in-fwd {
+  display: flex !important;
   -webkit-animation: swirl-in-fwd 0.7s ease-out both;
   animation: swirl-in-fwd 0.7s ease-out both;
 }
@@ -570,6 +670,7 @@ body {
 }
 
 .slide-out-blurred-top {
+  display: flex !important;
   -webkit-animation: slide-out-blurred-top 0.45s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
   animation: slide-out-blurred-top 0.45s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
 }
@@ -630,7 +731,8 @@ body {
   }
 }
 
-#menu-btn:hover, #start-stop-btn:hover {
+#menu-btn:hover,
+#start-stop-btn:hover {
   fill: rgba(255, 255, 255, 0.25);
 }
 
@@ -718,4 +820,43 @@ body {
     -webkit-transform: rotate(0);
     transform: rotate(0);
   }
+}
+
+#container-start-first-time{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  opacity: 1;
+  height: 200px;
+  width: 200px;
+  border: 3px dashed white;
+  z-index: 2;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+#container-start-first-time:hover {
+  border-color: #ff7f00 !important;
+  backdrop-filter: blur(2px);
+}
+
+#start-first-time-btn {
+  height: 50px;
+  width: 140px;
+  border-radius: 10px;
+  border: 3px solid white;
+  font-family: cursive;
+  font-weight: bold;
+  color: white;
+  background: transparent;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 28px;
+  backdrop-filter: blur(14px);
+}
+
+#start-first-time-btn:hover {
+  color: #f8d807;
+  border-color: #adc35e;
+  backdrop-filter: blur(30px) !important;
 }
