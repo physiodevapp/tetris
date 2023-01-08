@@ -34,12 +34,6 @@ class Random {
           break;
       }
       return this.figure
-
-      prevFigures.push(this.figure)
-      return {
-        'newFigure': this.figure,
-        'prevFigures': prevFigures
-      }
     }
   
     getColor() {

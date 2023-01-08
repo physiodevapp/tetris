@@ -87,9 +87,11 @@ class Game {
 
   initInteractions() {
     document.getElementById('start-first-time-btn').onclick = () => {
-      if (this.isControlsAnimationActive) {
+      if (this.isControlsAnimationActive ||
+        document.getElementById('controls-container').classList.contains('controls-container-unblur')) {
         return null
       }
+      console.log('start-first-time-btn')
       this.audioStart.play()
       document.getElementById('container-start-first-time').classList.add('slide-out-blurred-top')
       document.getElementById('controls-container').classList.add('controls-container-unblur')
@@ -453,7 +455,13 @@ class Game {
   }
 
   addNewFigure() {
+    console.log('newFigures ', this.newFigures)
     while (this.newFigures.length < 2) {
+      // const color = PALETTE_COLORS
+      //   .filter((color) => {
+      //     return this.newFigures.map((figure) => figure.color).indexOf(color) === -1
+      //   })
+      // console.log('color ', color)
       this.newFigures.push(this.random.getFigure(this.ctx, this.colDim, this.rowDim, false, this.allowLetters))
     }
 
