@@ -11,6 +11,7 @@
 
 <body>
   <div id="container">
+    <img id="image-logo" src="./assets/img/tetris-logo.png" alt="tetris-logo">
     <canvas id="background" width="0" height="0"></canvas>
     <div id="container-board-menu">
       <div id="container-start-first-time">
@@ -67,19 +68,23 @@
                 d="M 2 90 L 2 50 A 50 50 0 0 1 50 2 L 185 2 A 15 15 0 0 1 198 17 L 198 50 A 50 50 0 0 1 150 100 L 10 100 A 15 15 0 0 1 2 90"
                 stroke="white" stroke-width="4" fill="transparent">
               </path>
-              <path d="M 150 2 A 49 49 0 0 0 150 100" stroke="white" stroke-width="2" fill="transparent"
+              <path id="controls-separator" d="M 150 2 A 49 49 0 0 0 150 100" stroke="white" stroke-width="2" fill="transparent"
                 stroke-dasharray="5,5">
               </path>
-              <image id="start-stop-icon" outlined="false" href="./assets/img/play-filled.png" preserveAspectRatio="xMidYMid meet" width="50"
-                height="50" x="35" y="24"></image>
-              <path id="start-stop-btn"
-                d="M 4 90 L 4 50 A 48 48 0 0 1 50 4 L 148 4 A 46 46 0 1 0 148 98 L 19 98 A 15 15 0 0 1 4 90"
-                stroke="white" stroke-width="0" fill="transparent">
-              </path>
               <image id="menu-icon" outlined="true" href="./assets/img/gear-outlined.png" preserveAspectRatio="xMidYMid meet" width="60" height="60" x="120"
-                y="18"></image>
+              y="18"></image>
               <path id="menu-btn" d="M 150 4 A 47 47 0 1 0 196 50 L 196 4 Z" stroke="transparent" stroke-width="0"
-                fill="transparent">
+              fill="transparent">
+            </path>
+            <image id="start-stop-icon" outlined="false" href="./assets/img/play-filled.png" preserveAspectRatio="xMidYMid meet" width="50"
+              height="50" x="35" y="24"></image>
+            <path id="start-stop-btn"
+              d="M 4 90 L 4 50 A 48 48 0 0 1 50 4 L 148 4 A 46 46 0 1 0 148 98 L 19 98 A 15 15 0 0 1 4 90"
+              stroke="white" stroke-width="0" fill="transparent">
+            </path>
+            <path id="reset-btn"
+                d="M 2 90 L 2 50 A 50 50 0 0 1 50 2 L 185 2 A 15 15 0 0 1 198 17 L 198 50 A 50 50 0 0 1 150 100 L 10 100 A 15 15 0 0 1 2 90"
+                stroke="transparent" stroke-width="4" fill="transparent">
               </path>
             </svg>
           </div>

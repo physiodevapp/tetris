@@ -16,6 +16,65 @@ body {
   height: 100%;
 }
 
+#image-logo {
+  position: absolute;
+  top: 60px;
+  left: 40px;
+  width: 200px;
+  height: 40px;
+  opacity: 0.6;
+}
+
+.image-logo-gameover {
+  -webkit-animation: image-logo-gameover 0.7s ease-in-out both;
+  animation: image-logo-gameover 0.7s ease-in-out both;
+}
+
+@-webkit-keyframes image-logo-gameover {
+  0% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes image-logo-gameover {
+  0% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.image-logo-gameover-revert {
+  -webkit-animation: image-logo-gameover-revert 0.7s ease-in-out both;
+  animation: image-logo-gameover-revert 0.7s ease-in-out both;
+}
+
+@-webkit-keyframes image-logo-gameover-revert {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes image-logo-gameover-revert {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
 #background {
   border: 0px solid white;
   border-radius: 6px;
@@ -33,7 +92,7 @@ body {
 
 @-webkit-keyframes background-gameover {
   0% {
-    filter: grayscale(0) saturate(0.5);
+    -webkit-filter: grayscale(0) saturate(0.5);
   }
 
   100% {
@@ -43,7 +102,7 @@ body {
 
 @keyframes background-gameover {
   0% {
-    filter: grayscale(0) saturate(0.5);
+    -webkit-filter: grayscale(0) saturate(0.5);
   }
 
   100% {
@@ -270,8 +329,10 @@ body {
 
 .controls-container-unblur {
   opacity: 1 !important;
-  -webkit-animation: controls-container-unblur 0.45s ease-in-out both;;
-  animation: controls-container-unblur 0.45s ease-in-out both;;
+  -webkit-animation: controls-container-unblur 0.45s ease-in-out both;
+  ;
+  animation: controls-container-unblur 0.45s ease-in-out both;
+  ;
 }
 
 @-webkit-keyframes controls-container-unblur {
@@ -737,9 +798,128 @@ body {
   }
 }
 
+#reset-btn {
+  display: none;
+}
+
+.reset-btn-show {
+  display: inherit !important;
+}
+
 #menu-btn:hover,
-#start-stop-btn:hover {
+#start-stop-btn:hover,
+#reset-btn:hover {
   fill: rgba(255, 255, 255, 0.25);
+}
+
+.start-stop-icon-slide-center {
+  -webkit-animation: start-stop-icon-slide-center 0.7s ease-in-out both;
+  animation: start-stop-icon-slide-center 0.7s ease-in-out both;
+}
+
+@-webkit-keyframes start-stop-icon-slide-center {
+  0% {
+    -webkit-transform: translateX(0%);
+    transform: translateX(0%);
+  }
+
+  100% {
+    -webkit-transform: translateX(20%);
+    transform: translateX(20%);
+  }
+}
+
+@keyframes start-stop-icon-slide-center {
+  0% {
+    -webkit-transform: translateX(0%);
+    transform: translateX(0%);
+  }
+
+  100% {
+    -webkit-transform: translateX(20%);
+    transform: translateX(20%);
+  }
+}
+
+.start-stop-icon-slide-center-revert {
+  -webkit-animation: start-stop-icon-slide-center-revert 0.7s ease-in-out both;
+  animation: start-stop-icon-slide-center-revert 0.7s ease-in-out both;
+}
+
+@-webkit-keyframes start-stop-icon-slide-center-revert {
+  0% {
+    -webkit-transform: translateX(20%);
+    transform: translateX(20%);
+  }
+
+  100% {
+    -webkit-transform: translateX(0%);
+    transform: translateX(0%);
+  }
+}
+
+@keyframes start-stop-icon-slide-center-revert {
+  0% {
+    -webkit-transform: translateX(20%);
+    transform: translateX(20%);
+  }
+
+  100% {
+    -webkit-transform: translateX(0%);
+    transform: translateX(0%);
+  }
+}
+
+.controls-fade {
+  -webkit-animation: controls-fade 0.7s ease-in-out both;
+  animation: controls-fade 0.7s ease-in-out both;
+}
+
+@-webkit-keyframes controls-fade {
+  0% {
+    opacity: 1
+  }
+
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+@keyframes controls-fade {
+  0% {
+    opacity: 1
+  }
+
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+.controls-fade-revert {
+  -webkit-animation: controls-fade-revert 0.7s ease-in-out both;
+  animation: controls-fade-revert 0.7s ease-in-out both;
+}
+
+@-webkit-keyframes controls-fade-revert {
+  0% {
+    opacity: 0
+  }
+
+  100% {
+    opacity: 1
+  }
+}
+
+@keyframes controls-fade-revert {
+  0% {
+    opacity: 0
+  }
+
+  100% {
+    opacity: 1
+  }
 }
 
 #menu-icon {
@@ -828,7 +1008,7 @@ body {
   }
 }
 
-#container-start-first-time{
+#container-start-first-time {
   position: absolute;
   display: flex;
   align-items: center;
@@ -852,13 +1032,13 @@ body {
   border-radius: 10px;
   border: 3px solid white;
   font-family: cursive;
-  font-weight: bold;
   color: white;
   background: transparent;
   text-align: center;
   text-transform: uppercase;
   font-size: 28px;
   backdrop-filter: blur(14px);
+  /* font-weight: bold; */
 }
 
 #start-first-time-btn:hover {

@@ -11,7 +11,6 @@ document.onfullscreenchange = (ev) => {
 }
 
 window.onresize = (ev) => {
-  console.log('resized!')
   game.background.load()
 }
 

@@ -93,6 +93,13 @@ class Game {
   }
 
   initInteractions() {
+    document.getElementById('reset-btn').onclick = () => {
+      if (this.isControlsAnimationActive) {
+        return null
+      }
+      this.clickStartStopBtn()
+    }
+
     document.getElementById('start-first-time-btn').onclick = () => {
       if (this.isControlsAnimationActive ||
         document.getElementById('controls-container').classList.contains('controls-container-unblur')) {
@@ -271,6 +278,24 @@ class Game {
 
     document.getElementById('background').classList.add('background-gameover')
     document.getElementById('background').classList.remove('background-gameover-revert')
+
+    document.getElementById('image-logo').classList.add('image-logo-gameover')
+    document.getElementById('image-logo').classList.remove('image-logo-gameover-revert')
+
+    document.getElementById('controls-separator').classList.add('controls-fade')
+    document.getElementById('controls-separator').classList.remove('controls-fade-revert')
+
+    document.getElementById('menu-icon').classList.add('controls-fade')
+    document.getElementById('menu-icon').classList.remove('controls-fade-revert')    
+    document.getElementById('menu-icon').classList.remove('rotate-right')
+
+    document.getElementById('menu-btn').classList.add('controls-fade')
+    document.getElementById('menu-btn').classList.remove('controls-fade-revert')
+
+    document.getElementById('start-stop-icon').classList.add('start-stop-icon-slide-center')
+    document.getElementById('start-stop-icon').classList.remove('start-stop-icon-slide-center-revert')
+
+    document.getElementById('reset-btn').classList.add('reset-btn-show')
   }
 
   hideGameover() {
@@ -280,6 +305,25 @@ class Game {
 
     document.getElementById('background').classList.add('background-gameover-revert')
     document.getElementById('background').classList.remove('background-gameover')
+
+    document.getElementById('image-logo').classList.add('image-logo-gameover-revert')
+    document.getElementById('image-logo').classList.remove('image-logo-gameover')
+
+    document.getElementById('controls-separator').classList.add('controls-fade-revert')
+    document.getElementById('controls-separator').classList.remove('controls-fade')
+
+    document.getElementById('menu-icon').classList.add('controls-fade-revert')
+    document.getElementById('menu-icon').classList.remove('controls-fade')
+
+    document.getElementById('menu-btn').classList.add('controls-fade-revert')
+    document.getElementById('menu-btn').classList.remove('controls-fade')
+
+    document.getElementById('start-stop-icon').classList.add('start-stop-icon-slide-center-revert')
+    document.getElementById('start-stop-icon').classList.remove('start-stop-icon-slide-center')
+
+    setTimeout(() => {
+      document.getElementById('reset-btn').classList.remove('reset-btn-show')
+    }, 800);
   }
 
   togglePlayState() {
@@ -480,7 +524,7 @@ class Game {
       } else {
         this.avoidLetters = [this.newFigures[this.newFigures.length - 1].type]
       }
-      if (this.avoidColors.length < 3) {
+      if (this.avoidColors.length <= 3) {
         this.avoidColors.push(this.newFigures[this.newFigures.length - 1].color)
       } else {
         this.avoidColors = [this.newFigures[this.newFigures.length - 1].color]
