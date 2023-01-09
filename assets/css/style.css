@@ -403,7 +403,7 @@ body {
     transform: scale(0.9);
     left: 1px;
     opacity: 1;
-    border-color: transparent;
+    border-color: white;
   }
 
   100% {
@@ -429,7 +429,7 @@ body {
     transform: scale(0.9);
     left: 1px;
     opacity: 1;
-    border-color: transparent;
+    border-color: white;
   }
 
   100% {
@@ -561,6 +561,7 @@ body {
     transform: scale(0.9);
     left: -80%;
     opacity: 0.5;
+    border-color: transparent;
   }
 
   50% {
@@ -568,6 +569,7 @@ body {
     transform: scale(0.9);
     left: 1px;
     opacity: 1;
+    border-color: white;
   }
 
   100% {
@@ -575,6 +577,7 @@ body {
     transform: scale(1);
     left: 1px;
     opacity: 1;
+    border-color: transparent;
   }
 }
 
@@ -584,6 +587,7 @@ body {
     transform: scale(0.9);
     left: -80%;
     opacity: 0.5;
+    border-color: transparent;
   }
 
   50% {
@@ -591,6 +595,7 @@ body {
     transform: scale(0.9);
     left: 1px;
     opacity: 1;
+    border-color: white;
   }
 
   100% {
@@ -598,6 +603,7 @@ body {
     transform: scale(1);
     left: 1px;
     opacity: 1;
+    border-color: transparent;
   }
 }
 

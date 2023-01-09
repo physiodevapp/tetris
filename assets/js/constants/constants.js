@@ -1,7 +1,7 @@
 
 const COLOR_1 = '28 29 43'
 
-const COL_DIM = 8
+const COL_DIM = 8 
 const ROW_DIM = 2 * COL_DIM
 
 const GRID_LINE_COLOR = `rgba(${COLOR_1} / 100%)`

@@ -11,8 +11,10 @@ class Game {
     this.dropVel = 60
     this.drop = 0
 
+    /*
     this.prevFigures = []
     this.newFigures = []
+    */
 
     this.isIntervalPaused = false
 
@@ -42,7 +44,6 @@ class Game {
     this.initData()
     this.initGrid()
     this.initInteractions()
-    // this.initPanels()
   }
 
   // openFullscreen(elem) {
@@ -69,7 +70,13 @@ class Game {
 
   initData() {
     this.isFirstFigure = true
-    this.allowLetters = LETTERS
+
+    this.prevFigures = []
+    this.newFigures = []
+
+    this.avoidLetters = []
+    this.avoidColors = []
+
     this.matrix = new Matrix(this.colDim, this.rowDim)
     this.addNewFigure()
   }
@@ -91,7 +98,6 @@ class Game {
         document.getElementById('controls-container').classList.contains('controls-container-unblur')) {
         return null
       }
-      console.log('start-first-time-btn')
       this.audioStart.play()
       document.getElementById('container-start-first-time').classList.add('slide-out-blurred-top')
       document.getElementById('controls-container').classList.add('controls-container-unblur')
@@ -195,7 +201,7 @@ class Game {
   clickMenuBtn(resume = false) {
     if (this.playState === -2 ||
       !document.getElementById("controls-container").classList.contains('controls-container-unblur') ||
-      this - this.isIntervalPaused) {
+      this.isIntervalPaused) {
       return null
     }
     if (document.getElementById('board').classList.contains('slide-out-left')) {
@@ -455,35 +461,42 @@ class Game {
   }
 
   addNewFigure() {
-    console.log('newFigures ', this.newFigures)
     while (this.newFigures.length < 2) {
-      // const color = PALETTE_COLORS
-      //   .filter((color) => {
-      //     return this.newFigures.map((figure) => figure.color).indexOf(color) === -1
-      //   })
-      // console.log('color ', color)
-      this.newFigures.push(this.random.getFigure(this.ctx, this.colDim, this.rowDim, false, this.allowLetters))
-    }
+      const allowLetters = LETTERS
+        .filter((letter) => {
+          return this.avoidLetters.indexOf(letter) === -1
+        })
+      const color = this.random.getColor(
+        PALETTE_COLORS
+          .filter((color) => {
+            return this.avoidColors.indexOf(color) === -1
+          })
+      )
 
-    this.allowLetters = LETTERS
-      .filter((type) => {
-        return this.newFigures.map((figure) => figure.type).indexOf(type) === -1
-      })
+      this.newFigures.push(this.random.getFigure(this.ctx, this.colDim, this.rowDim, false, allowLetters, color))
+      
+      if (this.avoidLetters.length < 3) {
+        this.avoidLetters.push(this.newFigures[this.newFigures.length - 1].type)
+      } else {
+        this.avoidLetters = [this.newFigures[this.newFigures.length - 1].type]
+      }
+      if (this.avoidColors.length < 3) {
+        this.avoidColors.push(this.newFigures[this.newFigures.length - 1].color)
+      } else {
+        this.avoidColors = [this.newFigures[this.newFigures.length - 1].color]
+      }
+    }
 
     if (this.isFirstFigure) {
       this.figure = this.newFigures[0]
       this.newFigures.forEach((newFigure) => this.prevFigures.push(newFigure))
-    } else {
-      this.figure = this.newFigures.shift()
-      this.prevFigures.push(this.figure)
-    }
-
-    if (this.isFirstFigure) {
       this.panelFigure.render(
         this.newFigures[0].type,
         this.newFigures[0].color
       )
     } else {
+      this.figure = this.newFigures.shift()
+      this.prevFigures.push(this.figure)
       this.panelFigure.render(
         this.newFigures[this.newFigures.length - 1].type,
         this.newFigures[this.newFigures.length - 1].color

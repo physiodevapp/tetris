@@ -36,9 +36,9 @@ class Random {
       return this.figure
     }
   
-    getColor() {
-      const index = Math.floor(Math.random() * PALETTE_COLORS.length)
-      return PALETTE_COLORS[index]
+    getColor(colors = PALETTE_COLORS) {
+      const index = Math.floor(Math.random() * colors.length)
+      return colors[index]
     }
   
   }
