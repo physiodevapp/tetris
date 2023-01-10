@@ -541,10 +541,4 @@ class Game {
 
   }
 
-  playSound(audio, volume) { // https://stackoverflow.com/questions/6893080/html5-audio-play-sound-repeatedly-on-click-regardless-if-previous-iteration-h
-    const click = audio.cloneNode()
-    click.volume = volume
-    click.play()
-  }
-
 }
