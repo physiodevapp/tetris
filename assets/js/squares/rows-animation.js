@@ -1,8 +1,8 @@
 class Rows_Animation {
-  constructor(rows, sound) {
+  constructor(rows) {
     this.rows = rows
 
-    this.sound = sound
+    this.sound = new Sound(AUDIO_FULLROWS)
 
     this.squares = this.rows
       .reduce((acc, curr) => {

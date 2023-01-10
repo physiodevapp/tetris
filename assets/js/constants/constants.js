@@ -20,4 +20,5 @@ const BACKGROUND_IMAGE = "./assets/img/background.jpg"
 const AUDIO_GAMEOVER = './assets/audio/mixkit-arcade-retro-game-over-213.wav'
 const AUDIO_GAME_START = './assets/audio/mixkit-small-win-2020.wav'
 const AUDIO_FULLROWS = './assets/audio/mixkit-arcade-bonus-alert-767.wav'
+const AUDIO_VOLUME = 0.25
 

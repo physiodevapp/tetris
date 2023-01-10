@@ -6,9 +6,6 @@ class Matrix {
     this.values = this.create()
 
     this.intervalIds = []
-
-    this.audioFullRows = new Audio(AUDIO_FULLROWS)
-    this.audioFullRows.volume = 0.25
   }
 
   create() {
@@ -36,7 +33,7 @@ class Matrix {
     return new Promise(async (resolve) => {
       const fullRows = this.getFullRows()
       if (fullRows.length) {
-        const rowsAnimation = new Rows_Animation(fullRows, this.audioFullRows)
+        const rowsAnimation = new Rows_Animation(fullRows)
         const linePacks = this.getFullRowPacks() 
         await rowsAnimation.animateRows().then(async () => {
           setTimeout(async () => {

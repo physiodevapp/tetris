@@ -21,11 +21,8 @@ class Game {
 
     this.isControlsAnimationActive = false
 
-    this.audioGameover = new Audio(AUDIO_GAMEOVER)
-    this.audioGameover.volume = 0.25
-
-    this.audioStart = new Audio(AUDIO_GAME_START)
-    this.audioStart.volume = 0.25
+    this.soundGameover = new Sound(AUDIO_GAMEOVER)
+    this.soundStart = new Sound(AUDIO_GAME_START)
 
     document.getElementById('container-game-over').style.backgroundColor = GAMEOVER_BACKGROUND_COLOR
 
@@ -102,7 +99,7 @@ class Game {
         document.getElementById('controls-container').classList.contains('controls-container-unblur')) {
         return null
       }
-      this.audioStart.play()
+      this.soundStart.play()
       document.getElementById('container-start-first-time').classList.add('slide-out-blurred-top')
       document.getElementById('controls-container').classList.add('controls-container-unblur')
 
@@ -268,7 +265,8 @@ class Game {
   }
 
   showGameover() {
-    this.audioGameover.play()
+    // this.playSound(this.audioGameover, this.audioVolume)
+    this.soundGameover.play()
     document.getElementById('container-game-over').classList.add('swirl-in-fwd')
     document.getElementById('container-game-over').classList.remove('slide-out-blurred-top')
 
@@ -295,7 +293,7 @@ class Game {
   }
 
   hideGameover() {
-    this.audioStart.play()
+    this.soundStart.play()
     document.getElementById('container-game-over').classList.add('slide-out-blurred-top')
     document.getElementById('container-game-over').classList.remove('swirl-in-fwd')
 
@@ -402,7 +400,7 @@ class Game {
       !document.getElementById("controls-container").classList.contains('controls-container-unblur')) {
       return null
     }
-    this.audioStart.play()
+    this.soundStart.play()
     this.stop()
     this.clear()
     this.initData()
@@ -541,6 +539,12 @@ class Game {
       )
     }
 
+  }
+
+  playSound(audio, volume) { // https://stackoverflow.com/questions/6893080/html5-audio-play-sound-repeatedly-on-click-regardless-if-previous-iteration-h
+    const click = audio.cloneNode()
+    click.volume = volume
+    click.play()
   }
 
 }
