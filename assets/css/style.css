@@ -18,11 +18,11 @@ body {
 
 #image-logo {
   position: absolute;
-  top: 9vh;
-  left: 40px;
-  width: 200px;
-  height: 40px;
+  top: 5vmin;
+  left: 7vmin;
+  width: 17vw;
   opacity: 0.6;
+  max-width: 200px;
 }
 
 .image-logo-gameover {
