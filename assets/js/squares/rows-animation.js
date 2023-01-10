@@ -21,14 +21,9 @@ class Rows_Animation {
         this.animateRow(this.rows[i]).then(() => {
           this.animateSquaresInRow(this.rows[i])
           if (i === this.rows.length - 1) {
-            resolve('all animateRow launched!')
+            resolve('all animateRows launched!')
           }
         })
-        /* La otra opción es aquí, pero creo que funciona mejor en la otra posición, dentro del then()
-        if (i === this.rows.length - 1) {
-          resolve('all animateRow launched!')
-        }
-        */
       }
     })
   }

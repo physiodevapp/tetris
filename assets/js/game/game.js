@@ -11,11 +11,6 @@ class Game {
     this.dropVel = 60
     this.drop = 0
 
-    /*
-    this.prevFigures = []
-    this.newFigures = []
-    */
-
     this.isIntervalPaused = false
 
     this.random = new Random()
@@ -76,6 +71,8 @@ class Game {
 
     this.avoidLetters = []
     this.avoidColors = []
+
+    this.score.reset()
 
     this.matrix = new Matrix(this.colDim, this.rowDim)
     this.addNewFigure()
@@ -148,7 +145,6 @@ class Game {
       let action = null;
       switch (ev.keyCode) {
         case 82:
-          // console.log('R key pressed! ', this.playState)
           if (this.isMenuVisible) {
             if (this.isControlsAnimationActive) {
               return null
@@ -408,7 +404,6 @@ class Game {
     }
     this.stop()
     this.clear()
-    this.newFigures = []
     this.initData()
     setTimeout(() => {
       switch (this.playState) {
@@ -458,7 +453,7 @@ class Game {
       }
     }
 
-    this.render() // permite dibujar hasta la parte de la figura que quepa, auqneu vaya a terminarse la partida
+    this.render() // permite dibujar hasta la parte de la figura que quepa, aunque vaya a terminarse la partida
 
     if (this.isGameover()) {
       this.showGameover()

@@ -40,8 +40,9 @@ class Matrix {
         const linePacks = this.getFullRowPacks() 
         await rowsAnimation.animateRows().then(async () => {
           setTimeout(async () => {
-            await this.deleteFullRows().then(() => {
+            await this.deleteFullRows().then(() => {              
               rowsAnimation.intervalIds.forEach((intervalId) => clearInterval(intervalId))
+              document.getElementById('game').classList.add('game-round-border')
               resolve(linePacks)
             })
           }, 1000)

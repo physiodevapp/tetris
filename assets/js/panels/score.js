@@ -33,4 +33,10 @@ class Score {
     document.getElementById('score-value').innerHTML = `${this.total.toLocaleString('de-DE')}`
     document.getElementById('lines-value').innerHTML = `${this.lines.toLocaleString('de-DE')}`
   }
+
+  reset() {
+    this.total = 0;
+    this.lines = 0;
+    this.render()
+  }
 }

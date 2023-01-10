@@ -13,7 +13,7 @@ class Square {
 
   draw() {
     this.ctx.save()
-    this.ctx.fillStyle = this.color //'#702963'
+    this.ctx.fillStyle = this.color
     this.ctx.beginPath()
     this.ctx.roundRect(this.colToX() + SQUARE_PADDING + GRID_LINE_WIDTH * 0.6, this.rowToY() + SQUARE_PADDING, this.w - SQUARE_PADDING * 2, this.h - SQUARE_PADDING * 2, [4])
     this.ctx.fill()
@@ -42,6 +42,10 @@ class Square {
   }
 
   hide() {
+    if (this.y === ROW_DIM - 1 &&
+       document.getElementById('game').classList.contains('game-round-border')) {
+      document.getElementById('game').classList.remove('game-round-border')
+    }
     this.ctx.save()
     this.ctx.beginPath();
     this.ctx.clearRect(this.colToX(), this.rowToY(), this.w, this.h);

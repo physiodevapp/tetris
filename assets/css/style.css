@@ -242,7 +242,11 @@ body {
   position: absolute;
   left: 1px;
   border: 0px solid white;
-  border-radius: 18px 0px 0px 18px;
+  border-radius: 18px 0px 0px 0px;
+}
+
+.game-round-border {
+  border-radius: 18px 0px 0px 18px !important;
 }
 
 #info-panel {
