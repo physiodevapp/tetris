@@ -402,6 +402,7 @@ class Game {
       !document.getElementById("controls-container").classList.contains('controls-container-unblur')) {
       return null
     }
+    this.audioStart.play()
     this.stop()
     this.clear()
     this.initData()
