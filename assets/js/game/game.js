@@ -519,15 +519,13 @@ class Game {
 
       this.newFigures.push(this.random.getFigure(this.ctx, this.colDim, this.rowDim, false, allowLetters, color))
       
-      if (this.avoidLetters.length < 3) {
-        this.avoidLetters.push(this.newFigures[this.newFigures.length - 1].type)
-      } else {
-        this.avoidLetters = [this.newFigures[this.newFigures.length - 1].type]
+      this.avoidLetters.push(this.newFigures[this.newFigures.length - 1].type)
+      if (this.avoidLetters.length === 3) {
+        this.avoidLetters.shift()
       }
-      if (this.avoidColors.length <= 3) {
-        this.avoidColors.push(this.newFigures[this.newFigures.length - 1].color)
-      } else {
-        this.avoidColors = [this.newFigures[this.newFigures.length - 1].color]
+      this.avoidColors.push(this.newFigures[this.newFigures.length - 1].color)
+      if (this.avoidColors.length === 3) {
+        this.avoidColors.shift()
       }
     }
 
