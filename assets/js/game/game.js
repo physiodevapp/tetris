@@ -265,31 +265,34 @@ class Game {
   }
 
   showGameover() {
-    // this.playSound(this.audioGameover, this.audioVolume)
     this.soundGameover.play()
-    document.getElementById('container-game-over').classList.add('swirl-in-fwd')
-    document.getElementById('container-game-over').classList.remove('slide-out-blurred-top')
+    setTimeout(() => {
+      
+      document.getElementById('container-game-over').classList.add('swirl-in-fwd')
+      document.getElementById('container-game-over').classList.remove('slide-out-blurred-top')
+  
+      document.getElementById('background').classList.add('background-gameover')
+      document.getElementById('background').classList.remove('background-gameover-revert')
+  
+      document.getElementById('image-logo').classList.add('image-logo-gameover')
+      document.getElementById('image-logo').classList.remove('image-logo-gameover-revert')
+  
+      document.getElementById('controls-separator').classList.add('controls-fade')
+      document.getElementById('controls-separator').classList.remove('controls-fade-revert')
+  
+      document.getElementById('menu-icon').classList.add('controls-fade')
+      document.getElementById('menu-icon').classList.remove('controls-fade-revert')    
+      document.getElementById('menu-icon').classList.remove('rotate-right')
+  
+      document.getElementById('menu-btn').classList.add('controls-fade')
+      document.getElementById('menu-btn').classList.remove('controls-fade-revert')
+  
+      document.getElementById('start-stop-icon').classList.add('start-stop-icon-slide-center')
+      document.getElementById('start-stop-icon').classList.remove('start-stop-icon-slide-center-revert')
+  
+      document.getElementById('reset-btn').classList.add('reset-btn-show')
+    }, 250);
 
-    document.getElementById('background').classList.add('background-gameover')
-    document.getElementById('background').classList.remove('background-gameover-revert')
-
-    document.getElementById('image-logo').classList.add('image-logo-gameover')
-    document.getElementById('image-logo').classList.remove('image-logo-gameover-revert')
-
-    document.getElementById('controls-separator').classList.add('controls-fade')
-    document.getElementById('controls-separator').classList.remove('controls-fade-revert')
-
-    document.getElementById('menu-icon').classList.add('controls-fade')
-    document.getElementById('menu-icon').classList.remove('controls-fade-revert')    
-    document.getElementById('menu-icon').classList.remove('rotate-right')
-
-    document.getElementById('menu-btn').classList.add('controls-fade')
-    document.getElementById('menu-btn').classList.remove('controls-fade-revert')
-
-    document.getElementById('start-stop-icon').classList.add('start-stop-icon-slide-center')
-    document.getElementById('start-stop-icon').classList.remove('start-stop-icon-slide-center-revert')
-
-    document.getElementById('reset-btn').classList.add('reset-btn-show')
   }
 
   hideGameover() {
