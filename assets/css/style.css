@@ -7,16 +7,15 @@ body {
 
 #mobile {
   position: absolute;
-  background: black;
   width: 100vw;
   height: 100vh;
   top: 0;
   left: 0;
   z-index: 10;
-  opacity: 0.8;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
 
   div {
     color: white;
