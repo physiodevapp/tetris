@@ -1,21 +1,41 @@
+const canvas = document.getElementById('game');
+const game = new Game(canvas, COL_DIM, ROW_DIM);
+const isDesktop = window.matchMedia("(min-width: 1024px)");
 
-const canvas = document.getElementById('game')
-const game = new Game(canvas, COL_DIM, ROW_DIM)
-game.load()
-
-document.onfullscreenchange = (ev) => {
-  if (!document.fullscreenElement) {
-    document.getElementById('start-stop-btn').innerHTML = 'RESUME'
-    game.stop()
+function updateUIBasedOnDevice() {
+  if (isDesktop.matches) {
+    document.getElementById('container-board-menu').style.display = 'block';
+    document.getElementById('info-panel').style.display = 'block';
+    game.background.load();
+    game.load();
+  } else {
+    document.getElementById('container-board-menu').style.display = 'none';
+    document.getElementById('info-panel').style.display = 'none';
+    game.stop();
   }
 }
 
-window.onresize = (ev) => {
-  game.background.load()
+if (isDesktop.matches) {
+  game.load();
+} else {
+  updateUIBasedOnDevice();
 }
 
-window.addEventListener('keydown', function(e) {  // prevents scrolling down when pressing space bar
-  if(e.keyCode == 32 && e.target == document.body) {
+document.onfullscreenchange = (ev) => {
+  if (!document.fullscreenElement) {
+    document.getElementById('start-stop-btn').innerHTML = 'RESUME';
+    game.stop();
+  }
+};
+
+isDesktop.addEventListener('change', updateUIBasedOnDevice);
+
+window.addEventListener('resize', (ev) => {
+  updateUIBasedOnDevice();
+});
+
+window.addEventListener('keydown', function (e) {
+  if (e.keyCode == 32 && e.target == document.body) {
     e.preventDefault();
   }
 });
