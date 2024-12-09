@@ -3,11 +3,11 @@ const game = new Game(canvas, COL_DIM, ROW_DIM);
 const mobile = document.getElementById('mobile');
 
 function handleMobileVisibility() {
-  const isMobileOrTablet = window.matchMedia("(max-width: 1024px)").matches; // Cambia 1024px si necesitas otro límite
+  const isMobileOrTablet = window.matchMedia("(max-width: 1024px)").matches;
   if (isMobileOrTablet) {
-    mobile.style.display = 'block'; // Muestra el elemento para móviles/tablets
+    mobile.style.display = 'flex';
   } else {
-    mobile.style.display = 'none'; // Oculta el elemento para tamaños mayores
+    mobile.style.display = 'none';
   }
 }
 
