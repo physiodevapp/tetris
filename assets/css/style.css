@@ -5,6 +5,29 @@ body {
   height: 100%;
 }
 
+#mobile {
+  position: absolute;
+  background: black;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  div {
+    color: white;
+    font-size: 2em;
+    background-color: #7000ff;
+    border-radius: 0.4em;
+    padding: 0.4em;
+    font-weight: bold;
+  }
+}
+
 #container {
   position: relative;
   display: flex;
