@@ -22,6 +22,7 @@ body {
     color: white;
     font-size: 2em;
     background-color: #7000ff;
+    border: 1px solid white;
     border-radius: 0.4em;
     padding: 0.4em;
     font-weight: bold;
