@@ -1,23 +1,34 @@
+const canvas = document.getElementById('game');
+const game = new Game(canvas, COL_DIM, ROW_DIM);
+const mobile = document.getElementById('mobile');
 
-const canvas = document.getElementById('game')
-const game = new Game(canvas, COL_DIM, ROW_DIM)
-const mobile = document.getElementById('mobile')
-
-game.load()
-
-document.onfullscreenchange = (ev) => {
-  if (!document.fullscreenElement) {
-    document.getElementById('start-stop-btn').innerHTML = 'RESUME'
-    game.stop()
+function handleMobileVisibility() {
+  const isMobileOrTablet = window.matchMedia("(max-width: 1024px)").matches; // Cambia 1024px si necesitas otro límite
+  if (isMobileOrTablet) {
+    mobile.style.display = 'block'; // Muestra el elemento para móviles/tablets
+  } else {
+    mobile.style.display = 'none'; // Oculta el elemento para tamaños mayores
   }
 }
 
-window.onresize = (ev) => {
-  game.background.load()
-}
+handleMobileVisibility();
 
-window.addEventListener('keydown', function(e) {  // prevents scrolling down when pressing space bar
-  if(e.keyCode == 32 && e.target == document.body) {
+game.load();
+
+document.onfullscreenchange = (ev) => {
+  if (!document.fullscreenElement) {
+    document.getElementById('start-stop-btn').innerHTML = 'RESUME';
+    game.stop();
+  }
+};
+
+window.onresize = (ev) => {
+  handleMobileVisibility();
+  game.background.load();
+};
+
+window.addEventListener('keydown', function(e) { // Previene el desplazamiento al presionar la barra espaciadora
+  if (e.keyCode == 32 && e.target == document.body) {
     e.preventDefault();
   }
 });
