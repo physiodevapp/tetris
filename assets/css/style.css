@@ -25,6 +25,8 @@ body {
     border-radius: 0.4em;
     padding: 0.4em;
     font-weight: bold;
+    text-align: center;
+    margin: 1e;
   }
 }
 
