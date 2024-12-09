@@ -1,6 +1,8 @@
 
 const canvas = document.getElementById('game')
 const game = new Game(canvas, COL_DIM, ROW_DIM)
+const mobile = document.getElementById('mobile')
+
 game.load()
 
 document.onfullscreenchange = (ev) => {
