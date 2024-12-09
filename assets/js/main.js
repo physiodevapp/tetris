@@ -7,15 +7,18 @@ function toggleVisibility() {
   const containerBoardMenu = document.getElementById('container-board-menu');
   const infoPanel = document.getElementById('info-panel');
   const background = document.getElementById('background');
+  const mobile = document.getElementById('mobile');
 
   if (isDesktop.matches) {
     containerBoardMenu.style.display = 'block';
     infoPanel.style.display = 'block';
     background.style.display = 'block';
+    mobile.style.display = 'none';
   } else {
     containerBoardMenu.style.display = 'none';
     infoPanel.style.display = 'none';
     background.style.display = 'none';
+    mobile.style.display = 'block';
   }
 }
 
